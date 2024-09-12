@@ -6,6 +6,7 @@ use App\Models\Build;
 use App\Models\ContentSection;
 use App\Models\DiabloClass;
 use App\Models\SkillTree;
+use App\Models\SkillTreeChanges;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -57,8 +58,9 @@ class BuildService extends ApiService
         }
 
         // Save the stack data
-        if (array_key_exists('stack', $data)) {
-            $skillTree->skillChanges()->delete();
+        // But first, delete the old data
+        SkillTreeChanges::where('skill_tree_id', $skillTree->id)->delete();
+        if (array_key_exists('stack', $data) && count($data['stack']) > 0) {
             foreach ($data['stack'] as $skill) {
                 $skillTree->skillChanges()->create([
                     'skill_id' => $skill['id'],
@@ -171,14 +173,17 @@ class BuildService extends ApiService
 
         foreach ($data['base_tree']['skill_categories'] as $skillCategory) {
             foreach ($skillCategory['skills'] as $skill) {
+                $skillData = [
+                    'id' => $skill['id'],
+                ];
+
                 if (! array_key_exists('level', $skill) || $skill['level'] === 0) {
-                    continue;
+                    $skillData['level'] = 0;
+                } else {
+                    $skillData['level'] = $skill['level'];
                 }
 
-                $skills[] = [
-                    'id' => $skill['id'],
-                    'level' => $skill['level'],
-                ];
+                $skills[] = $skillData;
             }
         }
 

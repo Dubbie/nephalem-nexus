@@ -38,6 +38,7 @@ const handleStackUpdate = (data) => {
 const submit = () => {
     form.post(route("build.update.skill-tree", props.build.id), {
         preserveScroll: true,
+        preserveState: false,
         onSuccess: () => form.reset(),
         onError: () => form.reset(),
     });
@@ -47,7 +48,7 @@ const findObjectById = (arr, id) => {
     return arr.find((obj) => obj.id === id);
 };
 
-onBeforeMount(() => {
+const setupTree = () => {
     // Check for build skill tree
     if (props.build.skill_trees.length > 0) {
         const skillTreeData = props.build.skill_trees[0];
@@ -59,7 +60,7 @@ onBeforeMount(() => {
         // Load tree
         form.base_tree = props.classData;
 
-        // Add skills
+        // Add levels
         form.base_tree.skill_categories.map((category) => {
             category.skills.map((skill) => {
                 const baseSkill = findObjectById(baseSkillData, skill.id);
@@ -78,6 +79,10 @@ onBeforeMount(() => {
             };
         });
     }
+};
+
+onBeforeMount(() => {
+    setupTree();
 });
 </script>
 

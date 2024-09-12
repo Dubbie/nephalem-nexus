@@ -24,15 +24,6 @@ const sliderKey = ref(0);
 // Create a local copy of classData
 const localClassData = reactive(JSON.parse(JSON.stringify(props.classData)));
 
-// Watch for changes in props and update local copy
-watch(
-    () => props.classData,
-    (newValue) => {
-        Object.assign(localClassData, JSON.parse(JSON.stringify(newValue)));
-    },
-    { deep: true }
-);
-
 const currentStack = computed(() => {
     if (!stack.value.length || !currentStep.value) {
         return localClassData;
@@ -147,6 +138,12 @@ const addPointTo = (skill) => {
             }
         }
     }
+
+    updateClassData();
+};
+
+const updateClassData = () => {
+    emit("update:class-data", currentStack.value);
 };
 
 const removePointFrom = (event, skill) => {
@@ -170,6 +167,8 @@ const removePointFrom = (event, skill) => {
             resetStack();
         }
     }
+
+    updateClassData();
 };
 
 const findSkillById = (id) => {
@@ -260,6 +259,9 @@ const resetStack = () => {
     snapshot.value = null;
     stack.value = [];
     tempStack.value = [];
+
+    emit("update:stack", stack.value);
+    emit("update:class-data", currentStack.value);
 };
 
 const resetTree = () => {

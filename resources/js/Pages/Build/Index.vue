@@ -1,14 +1,16 @@
 <script setup>
 import AppAlert from "@/Components/AppAlert.vue";
+import AppButton from "@/Components/AppButton.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { IconSearch } from "@tabler/icons-vue";
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 
 const builds = ref([]);
 const loading = ref(false);
+const emitter = inject("emitter");
 
 const filter = useForm({
     name: "",
@@ -98,9 +100,18 @@ onMounted(() => {
                             <h3 class="text-2xl font-bold text-white">
                                 No guides published
                             </h3>
-                            <p class="text-zinc-500">
+                            <p class="text-zinc-500 mb-3">
                                 Seems like nobody created any guides yet.
                             </p>
+
+                            <p class="text-zinc-500 mb-1">
+                                Would you like to create one?
+                            </p>
+                            <AppButton
+                                color="blue"
+                                @click="emitter.emit('open-new-guide-modal')"
+                                >New Guide</AppButton
+                            >
                         </div>
                     </AppAlert>
                 </div>

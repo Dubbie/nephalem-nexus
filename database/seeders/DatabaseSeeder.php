@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->createDevUser();
         $this->call(SkillSeeder::class);
+        $this->call(PropertiesSeeder::class);
     }
 
     private function createDevUser(): void

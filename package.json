@@ -23,6 +23,7 @@
         "@headlessui/vue": "^1.7.23",
         "@tabler/icons-vue": "^3.14.0",
         "@vueup/vue-quill": "^1.2.0",
+        "mitt": "^3.0.1",
         "quill-better-table-plus": "^0.1.6",
         "vuedraggable": "^4.1.0"
     }

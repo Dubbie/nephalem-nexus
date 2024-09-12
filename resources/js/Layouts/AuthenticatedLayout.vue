@@ -4,9 +4,10 @@ import GuestHeader from "@/Layouts/Partials/GuestHeader.vue";
 import NavLink from "@/Components/NavLink.vue";
 import NewBuildModal from "@/Components/NewBuildModal.vue";
 import AppFooter from "@/Layouts/Partials/AppFooter.vue";
-import { onMounted, ref } from "vue";
+import { inject, onMounted, onUnmounted, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
+const emitter = inject("emitter");
 const showingNewGuideModal = ref(false);
 
 const setupAccordions = () => {
@@ -27,6 +28,14 @@ const setupAccordions = () => {
 
 onMounted(() => {
     setupAccordions();
+
+    emitter.on("open-new-guide-modal", () => {
+        showingNewGuideModal.value = true;
+    });
+});
+
+onUnmounted(() => {
+    emitter.off("open-new-guide-modal");
 });
 </script>
 
@@ -55,13 +64,16 @@ onMounted(() => {
                         >
                             Guides</NavLink
                         >
+                        <NavLink
+                            :active="route().current('item.*')"
+                            :href="route('item.index')"
+                        >
+                            Items</NavLink
+                        >
                     </div>
                     <div class="-ml-4 flex-1"></div>
 
-                    <AuthHeader
-                        v-if="$page.props.auth.user"
-                        @new-guide="showingNewGuideModal = true"
-                    />
+                    <AuthHeader v-if="$page.props.auth.user" />
                     <GuestHeader v-else />
                 </nav>
             </div>

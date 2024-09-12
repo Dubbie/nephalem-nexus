@@ -2,13 +2,14 @@
 import AppButton from "@/Components/AppButton.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
+import { inject } from "vue";
 
-const emit = defineEmits(["new-guide"]);
+const emitter = inject("emitter");
 </script>
 
 <template>
     <div class="flex items-center gap-3">
-        <AppButton color="blue" @click="$emit('new-guide')">
+        <AppButton color="blue" @click="emitter.emit('open-new-guide-modal')">
             New Guide</AppButton
         >
 

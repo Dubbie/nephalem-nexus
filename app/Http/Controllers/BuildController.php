@@ -207,11 +207,11 @@ class BuildController extends Controller
         return redirect(url()->previous());
     }
 
-    public function sendForApproval(Build $build)
+    public function updateStatus(Build $build)
     {
         $this->authorize('update', $build);
 
-        $response = $this->buildService->pending($build);
+        $response = $this->buildService->updateStatus($build);
         $rData = $response->getData(true);
 
         if ($rData['success']) {

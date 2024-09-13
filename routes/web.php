@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/guide/{build}/edit/skill-tree/update', [BuildController::class, 'updateSkillTree'])->name('build.update.skill-tree');
     Route::get('/guide/{build}/edit/sections', [BuildController::class, 'editSections'])->name('build.edit.sections');
     Route::post('/guide/{build}/edit/sections/update', [BuildController::class, 'updateSections'])->name('build.update.sections');
-    Route::post('/guide/{build}/update/status/pending', [BuildController::class, 'sendForApproval'])->name('build.update.status.approve');
+    Route::post('/guide/{build}/update/status/update', [BuildController::class, 'updateStatus'])->name('build.update.status');
     Route::post('/guide/store', [BuildController::class, 'store'])->name('build.store');
 
     Route::get('/waiting-for-approval', [BuildApproveController::class, 'index'])->name('build.wfa');

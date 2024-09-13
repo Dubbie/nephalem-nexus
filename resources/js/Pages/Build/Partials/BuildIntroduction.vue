@@ -16,17 +16,11 @@ const isAuthor = usePage().props.auth.user?.id === build.user_id;
 
 <template>
     <div id="Introduction">
-        <div v-if="build.introduction">
-            <div class="flex space-x-12">
-                <div
-                    v-html="build.introduction"
-                    class="flex-1 guide-section-content prose prose-invert prose-zinc"
-                ></div>
-
-                <!-- <div>
-                    <img src="/img/invchar.png" alt="" class="rounded-xl" />
-                </div> -->
-            </div>
+        <template v-if="build.introduction">
+            <div
+                v-html="build.introduction"
+                class="guide-section-content prose prose-invert prose-zinc w-full"
+            ></div>
 
             <div v-if="isAuthor && !hideButton" class="flex justify-end mt-6">
                 <AppButton
@@ -37,7 +31,7 @@ const isAuthor = usePage().props.auth.user?.id === build.user_id;
                     >Edit Introduction</AppButton
                 >
             </div>
-        </div>
+        </template>
         <div
             v-else
             class="flex flex-col items-center border-2 border-red-500/30 rounded-xl py-20"

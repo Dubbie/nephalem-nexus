@@ -21,8 +21,6 @@ class UpdateBuildStatusRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'active' => ['required', 'boolean'],
-        ];
+        return [];
     }
 }

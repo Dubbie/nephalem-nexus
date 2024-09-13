@@ -8,13 +8,8 @@ import { onMounted } from "vue";
 
 const model = defineModel();
 
-// const toolbarOptions = [
-//     ["bold", "italic", "underline"],
-//     ["accordion"], // Custom button for accordion
-// ];
-
 const toolbarOptions = [
-    [{ header: [1, 2, false] }],
+    [{ header: [2, 3, false] }],
     ["bold", "italic", "underline"],
     [{ color: [] }, { background: [] }],
     [{ align: [] }],

@@ -28,10 +28,8 @@ const buttonLabel = computed(() => {
     }
 });
 
-const sendForApproval = () => {
-    form.active = !props.build.active;
-
-    form.post(route("build.update.status.approve", props.build.id), {
+const updateStatus = () => {
+    form.post(route("build.update.status", props.build.id), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => form.reset(),
@@ -79,8 +77,10 @@ const hasSkillTree = computed(() => {
                 >
                 <div class="flex items-center space-x-6">
                     <AppButton
-                        @click="sendForApproval"
-                        :color="props.build.active ? 'red' : 'green'"
+                        @click="updateStatus"
+                        :color="
+                            props.build.status === 'approved' ? 'blue' : 'green'
+                        "
                         :disabled="
                             !props.build.is_complete ||
                             props.build.status === 'pending'

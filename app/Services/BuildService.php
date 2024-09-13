@@ -246,10 +246,19 @@ class BuildService extends ApiService
         return Build::approved()->orderBy('created_at', 'desc')->take($count)->get();
     }
 
-    public function pending(Build $build)
+    public function updateStatus(Build $build)
     {
         try {
-            $build->status = Build::STATUS_PENDING;
+            // Decide based on current status
+            $status = match ($build->status) {
+                Build::STATUS_DRAFT => Build::STATUS_PENDING,
+                Build::STATUS_PENDING => Build::STATUS_DRAFT,
+                Build::STATUS_APPROVED => Build::STATUS_DRAFT,
+                Build::STATUS_DECLINED => Build::STATUS_PENDING,
+                default => $build->status,
+            };
+
+            $build->status = $status;
             $build->approved_by = null;
             $build->decline_reason = null;
             $build->declined_by = null;

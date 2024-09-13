@@ -1,13 +1,14 @@
 <script setup>
 import AppBadge from "@/Components/AppBadge.vue";
-import { Link } from "@inertiajs/vue3";
-import { IconMaximize, IconPencil, IconTrash } from "@tabler/icons-vue";
+import AppButton from "@/Components/AppButton.vue";
+import { Link, useForm } from "@inertiajs/vue3";
 import { inject } from "vue";
 
 const props = defineProps({
     builds: Array,
 });
 
+const form = useForm({});
 const emitter = inject("emitter");
 
 const thClasses =
@@ -30,6 +31,12 @@ const getFormattedDate = (isoDate) => {
 
     // Combine into the desired format
     return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+};
+
+const approve = (build) => {
+    const form = useForm({});
+
+    form.post(route("build.approve", build));
 };
 
 const getStatusColor = (status) => {
@@ -63,6 +70,7 @@ const toTitleCase = (str) => {
                 <th class="text-left" :class="thClasses">Class</th>
                 <th class="text-center" :class="thClasses">Updated at</th>
                 <th class="text-center" :class="thClasses">Status</th>
+                <th class="text-center" :class="thClasses">Author</th>
                 <th :class="thClasses"></th>
             </tr>
         </thead>
@@ -70,7 +78,9 @@ const toTitleCase = (str) => {
         <tbody>
             <tr v-for="build in builds">
                 <td class="text-left" :class="tdClasses">
-                    <p class="font-semibold">{{ build.name }}</p>
+                    <Link :href="route('build.show', build)">
+                        <p class="font-semibold">{{ build.name }}</p>
+                    </Link>
                 </td>
 
                 <td class="text-left" :class="tdClasses">
@@ -89,27 +99,24 @@ const toTitleCase = (str) => {
                     </AppBadge>
                 </td>
 
-                <td class="flex justify-end space-x-1" :class="tdClasses">
-                    <div
-                        class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
-                        @click="emitter.emit('open-delete-guide-modal', build)"
+                <td class="text-center" :class="tdClasses">
+                    <p>{{ build.author.name }}</p>
+                </td>
+
+                <td class="flex justify-end space-x-3" :class="tdClasses">
+                    <AppButton
+                        outline
+                        color="red"
+                        :disabled="form.processing"
+                        @click="emitter.emit('open-decline-guide-modal', build)"
+                        >Decline</AppButton
                     >
-                        <IconTrash class="size-6" stroke-width="2" />
-                    </div>
-                    <Link :href="route('build.edit', build.id)">
-                        <div
-                            class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
-                        >
-                            <IconPencil class="size-6" stroke-width="2" />
-                        </div>
-                    </Link>
-                    <Link :href="route('build.preview', build.id)">
-                        <div
-                            class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
-                        >
-                            <IconMaximize class="size-6" stroke-width="2" />
-                        </div>
-                    </Link>
+                    <AppButton
+                        color="green"
+                        @click="approve(build)"
+                        :disabled="form.processing"
+                        >Approve</AppButton
+                    >
                 </td>
             </tr>
         </tbody>

@@ -8,6 +8,7 @@ use App\Models\ContentSection;
 use App\Models\DiabloClass;
 use App\Models\SkillTree;
 use App\Models\SkillTreeChanges;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class BuildService extends ApiService
     public function getFiltered(array $data)
     {
         try {
-            $query = Build::active();
+            $query = Build::approved();
 
             if (array_key_exists('search', $data)) {
                 $query->where('name', 'like', '%' . $data['search'] . '%');
@@ -116,21 +117,6 @@ class BuildService extends ApiService
             Log::info("Build #{$build->id} introduction saved.");
 
             return $this->apiResponse($build, "Introduction saved!");
-        } catch (Exception $e) {
-            return $this->apiResponse(null, $e->getMessage(), 500, false);
-        }
-    }
-
-    public function updateStatus(Build $build, bool $active)
-    {
-        try {
-            $build->active = $active;
-            $build->save();
-
-            Log::info("Build #{$build->id} status changed to {$active}");
-            $msg = $active ? "Guide published!" : "Guide hidden!";
-
-            return $this->apiResponse($build, $msg);
         } catch (Exception $e) {
             return $this->apiResponse(null, $e->getMessage(), 500, false);
         }
@@ -247,17 +233,74 @@ class BuildService extends ApiService
 
     public function getTrending(int $count = 4)
     {
-        return Build::withCount('likes')->active()->orderBy('likes_count', 'desc')->take($count)->get();
+        return Build::withCount('likes')->approved()->orderBy('likes_count', 'desc')->take($count)->get();
     }
 
     public function getPopular(int $count = 4)
     {
-        return Build::withCount('views')->active()->orderBy('views_count', 'desc')->take($count)->get();
+        return Build::withCount('views')->approved()->orderBy('views_count', 'desc')->take($count)->get();
     }
 
     public function getRecent(int $count = 4)
     {
-        return Build::active()->orderBy('created_at', 'desc')->take($count)->get();
+        return Build::approved()->orderBy('created_at', 'desc')->take($count)->get();
+    }
+
+    public function pending(Build $build)
+    {
+        try {
+            $build->status = Build::STATUS_PENDING;
+            $build->approved_by = null;
+            $build->decline_reason = null;
+            $build->declined_by = null;
+            $build->save();
+
+            Log::info("Build #{$build->id} status changed to {$build->status}");
+
+            return $this->apiResponse($build, "Sent for approval!");
+        } catch (Exception $e) {
+            return $this->apiResponse(null, $e->getMessage(), 500, false);
+        }
+    }
+
+    public function approve(Build $build, User $approver)
+    {
+        try {
+            $build->status = Build::STATUS_APPROVED;
+            $build->approved_by = $approver->id;
+            $build->decline_reason = null;
+            $build->declined_by = null;
+            $build->save();
+
+            Log::info("Build #{$build->id} approved by {$approver->name}");
+
+            return $this->apiResponse($build, "Guide approved!");
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return $this->apiResponse(null, "Something went wrong", 500, false);
+        }
+    }
+
+    public function decline(Build $build, User $decliner, string $reason)
+    {
+        try {
+            $build->status = Build::STATUS_DECLINED;
+            $build->approved_by = null;
+            $build->declined_by = $decliner->id;
+            $build->decline_reason = $reason;
+            $build->save();
+
+            Log::info("Build #{$build->id} declined by {$decliner->name}");
+
+            return $this->apiResponse($build, "Guide declined!");
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return $this->apiResponse(null, "Something went wrong", 500, false);
+        }
     }
 
     private function transformBaseTree(array &$data)

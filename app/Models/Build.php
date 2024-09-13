@@ -11,6 +11,11 @@ class Build extends Model
 {
     use HasFactory;
 
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_DECLINED = 'declined';
+    public const STATUS_APPROVED = 'approved';
+
     protected $fillable = [
         'user_id',
         'name',
@@ -19,7 +24,7 @@ class Build extends Model
         'introduction'
     ];
 
-    protected $with = ['author', 'diabloClass', 'skillTrees'];
+    protected $with = ['author', 'diabloClass', 'skillTrees', 'approvedBy', 'declinedBy'];
 
     protected $appends = [
         'is_complete',
@@ -63,6 +68,16 @@ class Build extends Model
         return $this->hasMany(BuildLike::class);
     }
 
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function declinedBy()
+    {
+        return $this->belongsTo(User::class, 'declined_by');
+    }
+
     public function viewCount(): Attribute
     {
         return new Attribute(get: fn() => $this->views->count());
@@ -78,9 +93,16 @@ class Build extends Model
         return new Attribute(get: fn() => $this->likes()->where('user_id', Auth::id())->exists());
     }
 
-    public function scopeActive($query)
+    public function scopeApproved($query)
     {
-        return $query->where('active', true);
+        // Where active and approved by is not null
+        return $query->where('status', 'approved');
+    }
+
+    public function scopeWaitingForApproval($query)
+    {
+        // Where user id is the same as auth user
+        return $query->where('status', 'pending');
     }
 
     private function checkIfComplete()

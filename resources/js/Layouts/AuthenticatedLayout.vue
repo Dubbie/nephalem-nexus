@@ -8,6 +8,7 @@ import { inject, onMounted, onUnmounted, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 import AppToast from "@/Components/AppToast.vue";
 import DeleteGuideModal from "@/Components/DeleteGuideModal.vue";
+import DeclineGuideModal from "@/Components/DeclineGuideModal.vue";
 
 const emitter = inject("emitter");
 const showingNewGuideModal = ref(false);
@@ -115,6 +116,7 @@ onUnmounted(() => {
             @close="showingNewGuideModal = false"
         />
         <DeleteGuideModal />
+        <DeclineGuideModal />
     </div>
 </template>
 

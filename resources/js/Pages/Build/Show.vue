@@ -74,7 +74,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Preview" />
+    <Head :title="build.name" />
 
     <AuthenticatedLayout>
         <div class="">
@@ -86,10 +86,7 @@ onMounted(() => {
                         <h1
                             class="flex items-center space-x-2 text-4xl font-bold mb-1"
                         >
-                            <span
-                                >{{ build.name }}
-                                {{ build.diablo_class.name }} Guide</span
-                            >
+                            <span>{{ build.name }}</span>
                             <LikeIcon
                                 :build="build"
                                 v-if="$page.props.auth.user"

@@ -11,12 +11,15 @@ use App\Models\Build;
 use App\Services\BuildService;
 use App\Services\ToastService;
 use Exception;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class BuildController extends Controller
 {
+    use AuthorizesRequests;
+
     private ToastService $toastService;
     private BuildService $buildService;
 
@@ -33,6 +36,8 @@ class BuildController extends Controller
 
     public function preview(Build $build)
     {
+        $this->authorize('view', $build);
+
         return Inertia::render('Build/Preview', [
             'build' => $build->load('sections.sectionable', 'diabloClass.skillCategories.skills'),
         ]);
@@ -40,6 +45,8 @@ class BuildController extends Controller
 
     public function show(Build $build)
     {
+        $this->authorize('view', $build);
+
         $this->buildService->handleVisit($build, request()->ip());
 
         return Inertia::render('Build/Show', [
@@ -64,6 +71,8 @@ class BuildController extends Controller
 
     public function delete(Build $build)
     {
+        $this->authorize('delete', $build);
+
         $response = $this->buildService->delete($build);
         $rData = $response->getData(true);
 
@@ -107,6 +116,8 @@ class BuildController extends Controller
 
     public function edit(Build $build)
     {
+        $this->authorize('update', $build);
+
         return Inertia::render('Build/Edit', [
             'build' => $build,
         ]);
@@ -114,6 +125,8 @@ class BuildController extends Controller
 
     public function update(Build $build, UpdateBuildBasicsRequest $request)
     {
+        $this->authorize('update', $build);
+
         $data = $request->validated();
 
         $response = $this->buildService->updateBasics($build, $data);
@@ -131,6 +144,8 @@ class BuildController extends Controller
 
     public function editIntroduction(Build $build)
     {
+        $this->authorize('update', $build);
+
         return Inertia::render('Build/Introduction', [
             'build' => $build,
         ]);
@@ -138,6 +153,8 @@ class BuildController extends Controller
 
     public function updateIntroduction(Build $build, UpdateBuildIntroductionRequest $request)
     {
+        $this->authorize('update', $build);
+
         $data = $request->validated();
 
         $response = $this->buildService->updateIntroduction($build, $data['introduction']);
@@ -154,6 +171,8 @@ class BuildController extends Controller
 
     public function editGear(Build $build)
     {
+        $this->authorize('update', $build);
+
         return Inertia::render('Build/Gear', [
             'build' => $build,
         ]);
@@ -161,6 +180,8 @@ class BuildController extends Controller
 
     public function editSkillTree(Build $build)
     {
+        $this->authorize('update', $build);
+
         // Load the relevant class data
         $class = $build->diabloClass->load('skillCategories', 'skillCategories.skills');
         return Inertia::render('Build/SkillTree', [
@@ -171,6 +192,7 @@ class BuildController extends Controller
 
     public function updateSkillTree(Build $build, UpdateSkillTreeRequest $request)
     {
+        $this->authorize('update', $build);
         $data = $request->validated();
 
         $response = $this->buildService->updateSkillTree($build, $data);
@@ -185,11 +207,11 @@ class BuildController extends Controller
         return redirect(url()->previous());
     }
 
-    public function updateStatus(Build $build, UpdateBuildStatusRequest $request)
+    public function sendForApproval(Build $build)
     {
-        $data = $request->validated();
+        $this->authorize('update', $build);
 
-        $response = $this->buildService->updateStatus($build, $data['active']);
+        $response = $this->buildService->pending($build);
         $rData = $response->getData(true);
 
         if ($rData['success']) {
@@ -203,6 +225,7 @@ class BuildController extends Controller
 
     public function editSections(Build $build)
     {
+        $this->authorize('update', $build);
         $build->load('sections.sectionable');
         $sections = $build->sections->map(function ($section) {
             return [
@@ -223,6 +246,7 @@ class BuildController extends Controller
 
     public function updateSections(Build $build, UpdateBuildDetailsRequest $request)
     {
+        $this->authorize('update', $build);
         $data = $request->validated();
 
         $response = $this->buildService->updateDetails($build, $data['sections']);

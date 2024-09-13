@@ -9,6 +9,7 @@ import AppDivider from "@/Components/AppDivider.vue";
 import AppButton from "@/Components/AppButton.vue";
 import BuildContextSection from "./Partials/BuildContextSection.vue";
 import { IconChevronLeft } from "@tabler/icons-vue";
+import DeclinedAlert from "@/Components/DeclinedAlert.vue";
 
 const props = defineProps({
     build: Object,
@@ -76,6 +77,13 @@ onMounted(() => {
             <BuildSidebar :active="activeSection" />
 
             <div class="ml-60">
+                <DeclinedAlert
+                    v-if="build.decline_reason"
+                    :reason="build.decline_reason"
+                    :name="build.declined_by.name"
+                    class="mb-6"
+                />
+
                 <div class="flex justify-between">
                     <div class="mb-6">
                         <h1 class="text-3xl font-bold">

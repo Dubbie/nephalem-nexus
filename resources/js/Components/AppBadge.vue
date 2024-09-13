@@ -13,6 +13,7 @@ const colorClasses = computed(() => {
         blue: "bg-blue-400/15 text-blue-300",
         red: "bg-red-500/10 text-red-400",
         green: "bg-lime-400/15 text-green-300",
+        zinc: "bg-zinc-500/10 text-zinc-400",
     }[props.color];
 });
 </script>

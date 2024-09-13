@@ -87,7 +87,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <Head title="Edit Build" />
+    <Head title="Edit Skill Tree" />
 
     <AuthenticatedLayout>
         <template #header>

@@ -67,7 +67,7 @@ watch(
 </script>
 
 <template>
-    <Head title="Edit Build" />
+    <Head title="Guides" />
 
     <AuthenticatedLayout>
         <template #header>

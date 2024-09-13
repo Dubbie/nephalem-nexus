@@ -26,7 +26,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Edit Build" />
+    <Head title="Edit Introduction" />
 
     <AuthenticatedLayout>
         <template #header>

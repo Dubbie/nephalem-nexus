@@ -13,8 +13,14 @@ const props = defineProps({
 <template>
     <Link
         :href="route('build.show', build)"
-        class="relative overflow-hidden bg-zinc-800 rounded-xl p-4 hover:ring-2 hover:ring-blue-500"
+        class="relative overflow-hidden bg-zinc-900 ring-1 ring-white/10 rounded-xl px-4 py-6 group hover:ring-2 hover:ring-blue-500"
     >
+        <img
+            :src="`/img/${build.diablo_class.name.toLowerCase()}.png`"
+            :alt="build.diablo_class.name"
+            class="absolute top-1/2 -translate-y-1/2 right-0 opacity-40 transform transition-all ease-in-out group-hover:opacity-70 group-hover:scale-105"
+        />
+
         <div class="relative">
             <p class="font-bold">{{ build.name }}</p>
             <p class="text-zinc-500 text-sm font-semibold">

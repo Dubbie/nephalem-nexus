@@ -113,7 +113,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <Head title="Edit Build" />
+    <Head title="Edit gear" />
 
     <AuthenticatedLayout>
         <template #header>

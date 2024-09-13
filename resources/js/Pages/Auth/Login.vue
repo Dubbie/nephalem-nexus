@@ -67,7 +67,7 @@ const submit = () => {
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
-                        class="underline text-xs text-zinc-600 hover:text-zinc-400 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="underline text-xs text-zinc-500 hover:text-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Forgot your password?
                     </Link>
@@ -92,7 +92,7 @@ const submit = () => {
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="mt-4 space-y-3">
                 <AppButton
                     color="blue"
                     class="w-full"
@@ -101,6 +101,14 @@ const submit = () => {
                     type="submit"
                 >
                     Log in
+                </AppButton>
+                <AppButton
+                    plain
+                    color="white"
+                    class="w-full"
+                    :href="route('register')"
+                >
+                    Register
                 </AppButton>
             </div>
         </form>

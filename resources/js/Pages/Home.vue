@@ -23,7 +23,7 @@ const demoMode = ref(false);
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Home" />
 
     <AuthenticatedLayout>
         <HeroSection class="mb-12" />

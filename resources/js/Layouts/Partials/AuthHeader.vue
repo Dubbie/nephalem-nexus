@@ -34,6 +34,15 @@ const emitter = inject("emitter");
                 <DropdownLink :href="route('build.own.index')">
                     My Guides
                 </DropdownLink>
+                <DropdownLink
+                    :href="route('build.wfa')"
+                    v-if="
+                        $page.props.auth.user.role === 'DEVELOPER' ||
+                        $page.props.auth.user.role === 'ADMIN'
+                    "
+                >
+                    Waiting for Approval
+                </DropdownLink>
                 <DropdownLink :href="route('logout')" method="post" as="button">
                     Log Out
                 </DropdownLink>

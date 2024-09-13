@@ -8,7 +8,7 @@ class ItemService extends ApiService
 {
     public function filter(array $data)
     {
-        $query = Item::with('weapon');
+        $query = Item::query();
 
         if (array_key_exists('name', $data)) {
             $query->where('name', 'like', '%' . $data['name'] . '%');

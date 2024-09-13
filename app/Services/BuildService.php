@@ -26,15 +26,21 @@ class BuildService extends ApiService
 
     public function updateBasics(Build $build, array $data)
     {
-        $build->name = $data['name'];
-        if ($data['diablo_class_id'] !== $build['diablo_class_id']) {
-            $build->diablo_class_id = $data['diablo_class_id'];
-            $this->resetSkillTrees($build);
+        try {
+            $build->name = $data['name'];
+            if ($data['diablo_class_id'] !== $build['diablo_class_id']) {
+                $build->diablo_class_id = $data['diablo_class_id'];
+                $this->resetSkillTrees($build);
+            }
+
+            $build->save();
+
+            Log::info("Build #{$build->id} basics updated.");
+
+            return $this->apiResponse($build, "Build basics updated!");
+        } catch (Exception $e) {
+            return $this->apiResponse(null, $e->getMessage(), 500, false);
         }
-
-        $build->save();
-
-        Log::info("Build #{$build->id} basics updated.");
     }
 
     public function updateSkillTree(Build $build, array $data)
@@ -76,18 +82,31 @@ class BuildService extends ApiService
 
     public function updateIntroduction(Build $build, string $introduction)
     {
-        $build->introduction = $introduction;
-        $build->save();
+        try {
+            $build->introduction = $introduction;
+            $build->save();
 
-        Log::info("Build #{$build->id} introduction saved.");
+            Log::info("Build #{$build->id} introduction saved.");
+
+            return $this->apiResponse($build, "Introduction saved!");
+        } catch (Exception $e) {
+            return $this->apiResponse(null, $e->getMessage(), 500, false);
+        }
     }
 
     public function updateStatus(Build $build, bool $active)
     {
-        $build->active = $active;
-        $build->save();
+        try {
+            $build->active = $active;
+            $build->save();
 
-        Log::info("Build #{$build->id} status changed to {$active}");
+            Log::info("Build #{$build->id} status changed to {$active}");
+            $msg = $active ? "Guide published!" : "Guide hidden!";
+
+            return $this->apiResponse($build, $msg);
+        } catch (Exception $e) {
+            return $this->apiResponse(null, $e->getMessage(), 500, false);
+        }
     }
 
     public function updateDetails(Build $build, array $sections)
@@ -156,7 +175,7 @@ class BuildService extends ApiService
 
             DB::commit();
 
-            return $this->apiResponse(null, "Build custom sections updated!", 200);
+            return $this->apiResponse(null, "Build sections updated!", 200);
         } catch (Exception $e) {
             DB::rollBack();
 

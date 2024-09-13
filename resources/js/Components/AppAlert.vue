@@ -25,8 +25,8 @@ const classes = computed(() => {
 
 <template>
     <div class="p-4 rounded-lg flex space-x-2" :class="classes">
-        <div v-if="icon">
-            <component :is="icon" class="size-5" />
+        <div v-if="icon" class="shrink-0">
+            <component :is="icon" class="size-5 shrink-0" />
         </div>
         <slot />
     </div>

@@ -92,10 +92,7 @@ const emit = defineEmits(["add", "remove"]);
                 }.png`"
                 :alt="`${skill.name} icon`"
                 :class="{
-                    'opacity-0':
-                        skill.level === 0 ||
-                        skill.level === undefined ||
-                        showingTooltip,
+                    'opacity-0': showingTooltip || !isAllocatable,
                 }"
                 @mouseenter="showingTooltip = true"
             />

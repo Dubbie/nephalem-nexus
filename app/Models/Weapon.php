@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Weapon extends Model
 {
-    protected $fillable = ['item_id', 'min_damage', 'max_damage', 'min_missile_damage', 'max_missile_damage', 'min_two_handed_damage', 'max_two_handed_damage', 'required_strength', 'required_dexterity', 'speed', 'has_splash'];
+    protected $fillable = ['item_id', 'min_damage', 'max_damage', 'min_missile_damage', 'max_missile_damage', 'min_two_handed_damage', 'max_two_handed_damage', 'speed', 'has_splash'];
 
     protected $appends = ['damage_type', 'damage_range'];
 

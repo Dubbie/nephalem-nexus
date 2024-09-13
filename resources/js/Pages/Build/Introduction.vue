@@ -69,7 +69,7 @@ const submit = () => {
                         </AppAlert>
                     </div>
 
-                    <div class="shrink-0">
+                    <!-- <div class="shrink-0">
                         <p class="text-sm font-semibold text-zinc-400 mb-1">
                             Inventory
                         </p>
@@ -90,7 +90,7 @@ const submit = () => {
                                 class="blur-sm"
                             />
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="mt-4">

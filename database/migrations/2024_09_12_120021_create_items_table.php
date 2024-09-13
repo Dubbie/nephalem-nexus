@@ -22,6 +22,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('width');
             $table->unsignedSmallInteger('height');
             $table->integer('level_requirement')->nullable();  // Required level
+            $table->integer('required_strength')->default(0);
+            $table->integer('required_dexterity')->default(0);
             $table->integer('max_sockets')->default(0);
             $table->timestamps();
         });

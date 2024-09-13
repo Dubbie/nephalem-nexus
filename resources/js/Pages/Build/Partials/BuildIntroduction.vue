@@ -5,6 +5,12 @@ import { IconExclamationMark } from "@tabler/icons-vue";
 import { inject } from "vue";
 
 const build = inject("build");
+const props = defineProps({
+    hideButton: {
+        type: Boolean,
+        default: false,
+    },
+});
 const isAuthor = usePage().props.auth.user?.id === build.user_id;
 </script>
 
@@ -22,7 +28,7 @@ const isAuthor = usePage().props.auth.user?.id === build.user_id;
                 </div> -->
             </div>
 
-            <div v-if="isAuthor" class="flex justify-end mt-6">
+            <div v-if="isAuthor && !hideButton" class="flex justify-end mt-6">
                 <AppButton
                     outline
                     color="white"

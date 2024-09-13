@@ -25,7 +25,7 @@ const props = defineProps({
         <SidebarLink
             :href="route('build.edit.gear', props.build.id)"
             :active="route().current('build.edit.gear')"
-            label="Gear & Charms"
+            label="Gear"
         />
         <SidebarLink
             :href="route('build.edit.skill-tree', props.build.id)"

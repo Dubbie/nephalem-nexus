@@ -7,6 +7,12 @@ import AppBuilder from "@/Components/AppBuilder.vue";
 import AppAlert from "@/Components/AppAlert.vue";
 import { usePage } from "@inertiajs/vue3";
 
+const props = defineProps({
+    hideButton: {
+        type: Boolean,
+        default: false,
+    },
+});
 const build = inject("build");
 const skillTree = ref(null);
 const stack = ref([]);
@@ -67,6 +73,10 @@ onBeforeMount(() => {
                         :stack-data="stack"
                     />
                 </div>
+                <p class="text-sm text-center text-zinc-500 mt-3">
+                    Skill trees assume you have done all quests granting extra
+                    skill points.
+                </p>
             </div>
 
             <div
@@ -74,7 +84,7 @@ onBeforeMount(() => {
                 class="guide-section-content prose prose-invert prose-zinc mt-6"
             ></div>
 
-            <div v-if="isAuthor" class="flex justify-end mt-6">
+            <div v-if="isAuthor && !hideButton" class="flex justify-end mt-6">
                 <AppButton
                     outline
                     color="white"

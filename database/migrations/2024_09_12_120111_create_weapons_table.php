@@ -20,8 +20,6 @@ return new class extends Migration
             $table->integer('max_two_handed_damage')->nullable();
             $table->integer('min_missile_damage')->nullable(); // For ranged
             $table->integer('max_missile_damage')->nullable();
-            $table->integer('required_strength')->nullable();
-            $table->integer('required_dexterity')->nullable();
             $table->integer('speed')->nullable();
             $table->boolean('has_splash')->default(false);
             $table->timestamps();

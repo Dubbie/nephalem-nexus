@@ -56,22 +56,23 @@ const speedClass = computed(() => {
                         item.weapon.damage_range
                     }}</span>
                 </p>
-                <p
-                    class="text-zinc-400 text-sm"
-                    v-show="item?.weapon.required_strength > 0"
-                >
-                    Required Strength:
-                    <span class="text-white">{{
-                        item.weapon.required_strength
-                    }}</span>
+                <p class="text-zinc-400 text-sm" v-if="item.armor">
+                    {{ item.armor.max_ac }} Defense
                 </p>
                 <p
                     class="text-zinc-400 text-sm"
-                    v-show="item?.weapon.required_dexterity > 0"
+                    v-if="item.required_strength > 0"
+                >
+                    Required Strength:
+                    <span class="text-white">{{ item.required_strength }}</span>
+                </p>
+                <p
+                    class="text-zinc-400 text-sm"
+                    v-if="item.required_dexterity > 0"
                 >
                     Required Dexterity:
                     <span class="text-white">{{
-                        item.weapon.required_dexterity
+                        item.required_dexterity
                     }}</span>
                 </p>
                 <p
@@ -90,19 +91,12 @@ const speedClass = computed(() => {
                     <span class="text-white">[{{ item.max_sockets }}]</span>
                 </p>
 
-                <p v-if="item?.weapon.has_splash" class="text-blue-400 text-sm">
+                <p
+                    v-if="item?.weapon?.has_splash"
+                    class="text-blue-400 text-sm"
+                >
                     Melee Attacks Deal Splash Damage
                 </p>
-
-                <ul>
-                    <li
-                        v-for="property in item.property_values"
-                        :key="property.id"
-                    >
-                        {{ property.property_stat.stat }}:
-                        {{ property.value }}
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

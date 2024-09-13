@@ -64,75 +64,11 @@ watch(filter, () => {
         <AppAlert color="yellow" class="mb-6">
             <IconExclamationCircleFilled class="size-5" />
             <div class="text-sm">
+                <p>Currently added items.</p>
                 <p>
-                    This is a list of all the currently supported items in the
-                    database.
+                    The properties are not stored, these are only for visual
+                    reference for now.
                 </p>
-                <p>
-                    I'm working towards full support for all items. This process
-                    takes a while so stay tuned for any updates regarding this
-                    feature.
-                </p>
-
-                <p class="mt-4 mb-2">My planned route:</p>
-                <div class="space-y-3">
-                    <div class="flex items-center space-x-2">
-                        <div
-                            class="p-1 bg-yellow-400 ring-2 ring-yellow-400 rounded-md flex items-center justify-center"
-                        >
-                            <IconCheck
-                                class="text-yellow-900 size-3"
-                                stroke-width="5"
-                            />
-                        </div>
-                        <p class="line-through">Affixes</p>
-                        <p class="text-white">Added all affixes.</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <div
-                            class="p-1 bg-yellow-400 ring-2 ring-yellow-400 rounded-md flex items-center justify-center"
-                        >
-                            <IconCheck
-                                class="text-yellow-900 size-3"
-                                stroke-width="5"
-                            />
-                        </div>
-                        <p class="line-through">Base Weapons</p>
-                        <p class="text-white">Added all spawnable weapons.</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <div
-                            class="p-1 ring-2 ring-yellow-400 rounded-md flex items-center justify-center"
-                        >
-                            <div class="size-3"></div>
-                        </div>
-                        <p>Base Armors</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <div
-                            class="p-1 ring-2 ring-yellow-400 rounded-md flex items-center justify-center"
-                        >
-                            <div class="size-3"></div>
-                        </div>
-                        <p>Unique Items</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <div
-                            class="p-1 ring-2 ring-yellow-400 rounded-md flex items-center justify-center"
-                        >
-                            <div class="size-3"></div>
-                        </div>
-                        <p>Set Items</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <div
-                            class="p-1 ring-2 ring-yellow-400 rounded-md flex items-center justify-center"
-                        >
-                            <div class="size-3"></div>
-                        </div>
-                        <p>Craft Items</p>
-                    </div>
-                </div>
             </div>
         </AppAlert>
 

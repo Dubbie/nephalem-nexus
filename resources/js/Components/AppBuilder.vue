@@ -59,13 +59,49 @@ const currentStack = computed(() => {
 const skillCategories = computed(() => currentStack.value.skill_categories);
 
 const maxPoints = computed(() => {
-    const maxPointsByLevel = 99;
+    const maxPointsByLevel = 98;
 
     return maxPointsByLevel + pointsFromQuests;
 });
-const remainingPoints = computed(
-    () => maxPoints.value - (characterLevel.value + pointsFromQuests)
-);
+
+const pointsAllocated = computed(() => {
+    let points = 0;
+
+    skillCategories.value.forEach((category) => {
+        category.skills.forEach((skill) => {
+            if (skill.level) {
+                points += skill.level;
+            }
+        });
+    });
+
+    return points;
+});
+
+const remainingPoints = computed(() => maxPoints.value - pointsAllocated.value);
+
+const requiredLevel = computed(() => {
+    let level = 1;
+
+    skillCategories.value.forEach((category) => {
+        category.skills.forEach((skill) => {
+            if (skill.required_level > level && skill.level > 0) {
+                level = skill.required_level;
+            }
+        });
+    });
+
+    // Compare level with points
+    const freePoints = pointsFromQuests;
+    const allocated = pointsAllocated.value;
+    const allocatedWithoutFree = allocated - freePoints + 1;
+
+    if (allocatedWithoutFree > level) {
+        level = allocatedWithoutFree;
+    }
+
+    return level;
+});
 
 const maxRows = 6;
 const maxCols = 3;
@@ -102,28 +138,14 @@ const grids = computed(() => {
     return _grids;
 });
 
-const characterLevel = computed(() => {
-    let points = 1 - pointsFromQuests;
-
-    skillCategories.value.forEach((category) => {
-        category.skills.forEach((skill) => {
-            if (skill.level) {
-                points += skill.level;
-            }
-        });
-    });
-
-    return points;
-});
-
 const addPointTo = (skill) => {
     // Disable interaction if readonly
     if (props.readonly) {
         return;
     }
 
-    const isAllocatable = skill.max_level > skill.level || !skill.level;
-    const maxPointsReached = characterLevel.value >= maxPoints.value;
+    const isAllocatable = canAllocateSkill(skill);
+    const maxPointsReached = pointsAllocated.value >= maxPoints.value; // TODO: Check if max points reached
 
     if (isAllocatable && !maxPointsReached) {
         skill.level = (skill.level || 0) + 1;
@@ -183,9 +205,12 @@ const findSkillByCategoryAndPosition = (categoryId, row, col) => {
         ?.skills.find((skill) => skill.row === row && skill.col === col);
 };
 
-const canAllocateSkill = (skill, characterLevel) => {
+const canAllocateSkill = (skill, ignoreMax = false) => {
     if (!skill) return false;
-    if (skill.required_level > characterLevel + pointsFromQuests) return false;
+
+    // Check if skill has max already
+    if (!ignoreMax && skill.level >= skill.max_level) return false;
+
     return checkPrerequisites(skill);
 };
 
@@ -208,10 +233,6 @@ const startRecording = () => {
 
 const stopRecording = () => {
     recording.value = false;
-    // tempStack.value.push(getCurrentSkillsState());
-
-    console.log("Temp stack is:");
-    console.log(tempStack.value);
     currentStep.value = tempStack.value.length + 1;
 
     sendStackUpdate();
@@ -249,9 +270,6 @@ const toggleRecording = () => {
 
 // Handle changes when scrolling through stages
 const resetStack = () => {
-    console.log("Reset stack");
-    console.log(currentStack.value);
-
     Object.assign(
         localClassData,
         JSON.parse(JSON.stringify(currentStack.value))
@@ -329,9 +347,7 @@ onMounted(() => {
                             v-for="(cell, index) in grids[skillCategory.id]"
                             :key="index"
                             :skill="cell.skill"
-                            :is-allocatable="
-                                canAllocateSkill(cell.skill, characterLevel)
-                            "
+                            :is-allocatable="canAllocateSkill(cell.skill, true)"
                             :class-name="currentStack.name"
                             :row="cell.row"
                             :col="cell.col"
@@ -376,14 +392,14 @@ onMounted(() => {
                 <p>
                     Remaining points: <b>{{ remainingPoints }}</b>
                 </p>
-                <p v-show="characterLevel > 1">
-                    Required level: <b>{{ Math.max(0, characterLevel) }}</b>
+                <p>
+                    Required level: <b>{{ requiredLevel }}</b>
                 </p>
 
                 <AppButton
                     plain
                     @click="resetTree"
-                    v-show="characterLevel > 1 && !readonly"
+                    v-show="pointsAllocated > 1 && !readonly"
                     >Reset tree</AppButton
                 >
             </div>

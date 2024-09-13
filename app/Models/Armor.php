@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Armor extends Model
 {
-    protected $fillable = ['item_id', 'defense', 'required_strength', 'durability', 'max_durability'];
+    protected $fillable = ['item_id', 'min_ac', 'max_ac'];
 
     public function item()
     {

@@ -103,9 +103,12 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="space-y-8">
-                    <BuildIntroduction class="guide-section" />
+                    <BuildIntroduction
+                        class="guide-section"
+                        hide-button="true"
+                    />
                     <AppDivider />
-                    <BuildSkillTree class="guide-section" />
+                    <BuildSkillTree class="guide-section" hide-button="true" />
                     <template
                         v-for="section in build.sections"
                         :key="section.id"

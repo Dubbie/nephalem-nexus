@@ -144,7 +144,7 @@ onMounted(() => {
 }
 
 .diablo-editor .ql-editor {
-    @apply bg-transparent ring-1 ring-white/15 rounded-lg mt-3 hover:ring-white/30;
+    @apply bg-zinc-900 ring-1 ring-white/15 rounded-lg mt-3 hover:ring-white/30;
 }
 
 /* Customize tooltips */

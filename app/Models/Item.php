@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class Item extends Model implements ItemInterface
 {
-    protected $fillable = ['name', 'code', 'type', 'gfx_base', 'gfx_unique', 'gfx_set', 'level_requirement', 'stackable', 'width', 'height', 'max_sockets'];
+    protected $fillable = ['name', 'code', 'type', 'gfx_base', 'gfx_unique', 'gfx_set', 'level_requirement', 'required_strength', 'required_dexterity', 'stackable', 'width', 'height', 'max_sockets'];
 
     protected $appends = ['images', 'detailed_type'];
+
+    protected $with = ['weapon', 'armor'];
 
     public function images(): Attribute
     {
@@ -34,10 +36,10 @@ class Item extends Model implements ItemInterface
         return $this->hasOne(Weapon::class, 'item_id', 'id');
     }
 
-    // public function armor()
-    // {
-    //     return $this->hasOne(Armor::class);
-    // }
+    public function armor()
+    {
+        return $this->hasOne(Armor::class, 'item_id', 'id');
+    }
 
     public function stats()
     {
@@ -52,88 +54,55 @@ class Item extends Model implements ItemInterface
 
     public function getType(): string
     {
-        switch ($this->type) {
-            case 'axe':
-                $_type = 'Axe';
-                break;
-            case 'wand':
-                $_type = 'Wand';
-                break;
-            case 'club':
-                $_type = 'Club';
-                break;
-            case 'scep':
-                $_type = 'Scepter';
-                break;
-            case 'mace':
-                $_type = 'Mace';
-                break;
-            case 'hamm':
-                $_type = 'Hammer';
-                break;
-            case 'swor':
-                $_type = 'Sword';
-                break;
-            case 'knif':
-                $_type = 'Dagger';
-                break;
-            case 'tkni':
-                $_type = 'Throwing Knives';
-                break;
-            case 'taxe':
-                $_type = 'Throwing Axes';
-                break;
-            case 'jave':
-                $_type = 'Javelin';
-                break;
-            case 'spea':
-                $_type = 'Spear';
-                break;
-            case 'pole':
-                $_type = 'Polearm';
-                break;
-            case 'bow':
-                $_type = 'Bow';
-                break;
-            case 'sc9':
-                $_type = 'Scythe';
-                break;
-            case 'staf':
-                $_type = 'Staff';
-                break;
-            case 'bow':
-                $_type = 'Bow';
-                break;
-            case 'xbow':
-                $_type = 'Crossbow';
-                break;
-                // case 'tpot':
-                //     $_type = 'Throwing Potion';
-                //     break;
-            case 'h2h':
-            case 'h2h2':
-                $_type = 'Claw';
-                break;
-            case 'orb':
-                $_type = 'Orb';
-                break;
-            case 'abow':
-                $_type = 'Amazon Bow';
-                break;
-            case 'aspe':
-                $_type = 'Amazon Spear';
-                break;
-            case 'ajav':
-                $_type = 'Amazon Javelin';
-                break;
-            default:
-                Log::error('Unknown item type: ' . $this->type);
-                $_type = $this->type;
-                break;
+        // Create a mapping array for item types and their corresponding class names
+        $typeMap = [
+            'axe' => 'Axe',
+            'wand' => 'Wand',
+            'club' => 'Club',
+            'scep' => 'Scepter',
+            'mace' => 'Mace',
+            'hamm' => 'Hammer',
+            'swor' => 'Sword',
+            'knif' => 'Dagger',
+            'tkni' => 'Throwing Knives',
+            'taxe' => 'Throwing Axes',
+            'jave' => 'Javelin',
+            'spea' => 'Spear',
+            'pole' => 'Polearm',
+            'bow' => 'Bow',
+            'sc9' => 'Scythe',
+            'staf' => 'Staff',
+            'xbow' => 'Crossbow',
+            // 'tpot' => 'Throwing Potion',
+            'h2h' => 'Claw',
+            'h2h2' => 'Claw',
+            'orb' => 'Orb',
+            'abow' => 'Amazon Bow',
+            'aspe' => 'Amazon Spear',
+            'ajav' => 'Amazon Javelin',
+            'boot' => 'Boots',
+            'helm' => 'Helm',
+            'tors' => 'Armor',
+            'glov' => 'Gloves',
+            'shie' => 'Shield',
+            'belt' => 'Belt',
+            'pelt' => 'Pelt',
+            'phlm' => 'Primal Helm',
+            'ashd' => 'Auric Shield',
+            'head' => 'Voodoo Head',
+            'circ' => 'Circlet'
+        ];
+
+        // If the type exists in the array, return the corresponding class name, otherwise log an error
+        $_type = $typeMap[$this->type] ?? $this->type;
+
+        if (!isset($typeMap[$this->type])) {
+            Log::error('Unknown item type: ' . $this->type);
         }
 
         return $_type . " Class";
     }
+
 
     private function getBaseImageUrl(): string
     {

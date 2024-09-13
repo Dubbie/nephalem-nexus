@@ -6,6 +6,7 @@ import NewBuildModal from "@/Components/NewBuildModal.vue";
 import AppFooter from "@/Layouts/Partials/AppFooter.vue";
 import { inject, onMounted, onUnmounted, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
+import AppToast from "@/Components/AppToast.vue";
 
 const emitter = inject("emitter");
 const showingNewGuideModal = ref(false);
@@ -43,6 +44,8 @@ onUnmounted(() => {
     <div
         class="relative isolate flex min-h-svh w-full flex-col bg-zinc-900 lg:bg-zinc-950"
     >
+        <AppToast />
+
         <header class="flex items-center px-4">
             <!-- <div class="py-2 5 lg:hidden"></div> -->
 
@@ -67,6 +70,7 @@ onUnmounted(() => {
                         <NavLink
                             :active="route().current('item.*')"
                             :href="route('item.index')"
+                            v-if="$page.props.auth.user.role === 'DEVELOPER'"
                         >
                             Items</NavLink
                         >

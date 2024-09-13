@@ -28,8 +28,8 @@ const emitter = inject("emitter");
             </template>
 
             <template #content>
-                <DropdownLink :href="route('profile.edit')">
-                    Profile
+                <DropdownLink :href="route('settings.profile')">
+                    Settings
                 </DropdownLink>
                 <DropdownLink :href="route('build.own.index')">
                     My Guides

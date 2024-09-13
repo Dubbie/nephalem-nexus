@@ -5,6 +5,7 @@ use App\Http\Controllers\BuildController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
+    });
+
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get('/profile', [SettingsController::class, 'profile'])->name('settings.profile');
+        Route::post('/profile/photo', [SettingsController::class, 'updateProfilePhoto'])->name('settings.profile.update.photo');
     });
 });
 

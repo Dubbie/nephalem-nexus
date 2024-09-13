@@ -26,6 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo',
+        'role'
     ];
 
     /**
@@ -56,7 +58,7 @@ class User extends Authenticatable
     public function profilePhotoUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->profile_photo_url ?? '/img/avatar.png'
+            get: fn() => $this->profile_photo ? asset('storage/' . $this->profile_photo) : asset('img/avatar.png')
         );
     }
 

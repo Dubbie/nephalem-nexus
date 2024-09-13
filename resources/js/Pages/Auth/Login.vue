@@ -53,6 +53,7 @@ const submit = () => {
                     type="email"
                     class="mt-1 block text-sm w-full"
                     v-model="form.email"
+                    tabindex="1"
                     required
                     autofocus
                     autocomplete="username"
@@ -67,6 +68,7 @@ const submit = () => {
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
+                        tabindex="6"
                         class="underline text-xs text-zinc-500 hover:text-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Forgot your password?
@@ -77,6 +79,7 @@ const submit = () => {
                     id="password"
                     type="password"
                     class="mt-1 block text-sm w-full"
+                    tabindex="2"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -87,7 +90,11 @@ const submit = () => {
 
             <div class="block mt-4">
                 <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
+                    <Checkbox
+                        name="remember"
+                        v-model:checked="form.remember"
+                        tabindex="3"
+                    />
                     <span class="ms-2 text-sm text-zinc-500">Remember me</span>
                 </label>
             </div>
@@ -96,6 +103,7 @@ const submit = () => {
                 <AppButton
                     color="blue"
                     class="w-full"
+                    tabindex="4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                     type="submit"
@@ -106,6 +114,7 @@ const submit = () => {
                     plain
                     color="white"
                     class="w-full"
+                    tabindex="5"
                     :href="route('register')"
                 >
                     Register

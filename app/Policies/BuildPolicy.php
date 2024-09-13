@@ -22,8 +22,7 @@ class BuildPolicy
     public function view(User $user, Build $build): bool
     {
         // Check if build is published and approved
-        if ($build->active && $build->is_approved) {
-            Log::info("User #{$user->id} can view build #{$build->id}");
+        if ($build->status === Build::STATUS_APPROVED) {
             return true;
         }
 

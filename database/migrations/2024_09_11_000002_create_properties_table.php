@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('item_properties', function (Blueprint $table) {
-            $table->id();
-            $table->string('code');
+        Schema::create('properties', function (Blueprint $table) {
+            $table->string('code')->primary();
             $table->boolean('done')->default(false);
             $table->text('desc')->nullable();
             $table->string('param')->nullable();
             $table->string('min')->nullable();
             $table->string('max')->nullable();
-            $table->text('notes')->nullable();
-            $table->boolean('eol')->default(false);  // If "*eol" means end of life or status
-            $table->timestamps();
         });
     }
 
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_properties');
+        Schema::dropIfExists('properties');
     }
 };

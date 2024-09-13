@@ -15,7 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->createDevUser();
         $this->call(SkillSeeder::class);
-        $this->call(PropertiesSeeder::class);
+        $this->call(TblEntrySeeder::class);
+        $this->call(StatSeeder::class);
+        $this->call(PropertySeeder::class);
     }
 
     private function createDevUser(): void

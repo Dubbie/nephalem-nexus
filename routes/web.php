@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AffixController;
 use App\Http\Controllers\BuildController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PageController;
@@ -10,6 +11,7 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 
 Route::get('/guide', [BuildController::class, 'index'])->name('build.index');
 Route::get('/item', [ItemController::class, 'index'])->name('item.index');
+Route::get('/affix', [AffixController::class, 'index'])->name('affix.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

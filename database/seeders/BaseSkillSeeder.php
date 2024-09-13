@@ -36,8 +36,6 @@ abstract class BaseSkillSeeder extends Seeder
                 $skill->required_level = $skillData['required_level'];
                 $skill->max_level = $skillData['max_level'];
                 $skill->skill_category_id = $skillCategory->id;
-
-                echo 'Creating skill: ' . $skill->name . '...';
                 $skill->save();
 
                 if (isset($skillData['prerequisites'])) {
@@ -51,7 +49,6 @@ abstract class BaseSkillSeeder extends Seeder
                         ]);
                     }
                 }
-                echo 'done!' . PHP_EOL;
 
                 $skillsCreated->add($skill);
             }

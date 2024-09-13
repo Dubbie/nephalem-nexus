@@ -4,16 +4,4 @@ namespace App\Services;
 
 use App\Models\Item;
 
-class ItemService extends ApiService
-{
-    public function filter(array $data)
-    {
-        $query = Item::with('weapon');
-
-        if (array_key_exists('name', $data)) {
-            $query->where('name', 'like', '%' . $data['name'] . '%');
-        }
-
-        return $this->apiResponse($query->get(), "Items found!");
-    }
-}
+class ItemService extends ApiService {}

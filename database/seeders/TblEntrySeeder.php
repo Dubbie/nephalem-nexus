@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\TranslateEntry;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\TblEntry;
 use Illuminate\Database\Seeder;
 
-class TranslateEntrySeeder extends Seeder
+class TblEntrySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +13,7 @@ class TranslateEntrySeeder extends Seeder
     public function run(): void
     {
         // Delete all entries
-        TranslateEntry::truncate();
+        TblEntry::query()->delete();
 
         // Get entries
         $entries = $this->getEntries();
@@ -66,8 +65,8 @@ class TranslateEntrySeeder extends Seeder
 
     private function createEntries(array $entries): void
     {
-        foreach ($entries as $key => $value) {
-            TranslateEntry::updateOrCreate(['key' => $value['key']], ['value' => $value['value']]);
+        foreach ($entries as $value) {
+            TblEntry::updateOrCreate(['key' => $value['key']], ['value' => $value['value']]);
         }
     }
 }

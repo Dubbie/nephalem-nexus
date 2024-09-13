@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('translate_entries', function (Blueprint $table) {
+        Schema::create('affixes', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
-            $table->text('value');
-            $table->timestamps();
+            $table->string('type'); // Prefix, Suffix
+            $table->string('name');
+            $table->unsignedMediumInteger('group')->nullable();
+            $table->string('required_level');
+            $table->string('class')->nullable();
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('translate_entries');
+        Schema::dropIfExists('affixes');
     }
 };

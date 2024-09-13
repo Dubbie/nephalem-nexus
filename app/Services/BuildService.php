@@ -3,11 +3,14 @@
 namespace App\Services;
 
 use App\Models\Build;
+use App\Models\BuildView;
 use App\Models\ContentSection;
 use App\Models\DiabloClass;
 use App\Models\SkillTree;
 use App\Models\SkillTreeChanges;
 use Exception;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -96,6 +99,10 @@ class BuildService extends ApiService
         }
 
         Log::info("Build {$build->id} skill tree updated");
+
+        // Update the build updated_at timestamp
+        $build->updated_at = Carbon::now();
+        $build->save();
 
         return $this->apiResponse(null, "Skill tree saved!");
     }
@@ -193,6 +200,10 @@ class BuildService extends ApiService
                 $build->sections()->whereIn('id', $sectionsToDelete)->delete();
             }
 
+            // Update the build updated_at timestamp
+            $build->updated_at = Carbon::now();
+            $build->save();
+
             DB::commit();
 
             return $this->apiResponse(null, "Build sections updated!", 200);
@@ -204,6 +215,49 @@ class BuildService extends ApiService
 
             return $this->apiResponse(null, $e->getMessage(), 500);
         }
+    }
+
+    public function handleVisit(Build $build, string $ipAddress)
+    {
+        // Check if the visitor has already viewed the build (by IP or cookie)
+        if (!$build->views()->where('ip_address', $ipAddress)->exists()) {
+            // Record the unique view
+            $build->views()->create(['ip_address' => $ipAddress]);
+            Log::info("Build #{$build->id} visited by {$ipAddress}");
+        }
+    }
+
+    public function like(Build $build)
+    {
+        try {
+            if ($build->likes()->where('user_id', Auth::id())->exists()) {
+                $build->likes()->where('user_id', Auth::id())->delete();
+                return $this->apiResponse($build, "You no longer like this guide.");
+            }
+
+            $build->likes()->create(['user_id' => Auth::id()]);
+            return $this->apiResponse($build, "Guide liked!");
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return $this->apiResponse(null, "Something went wrong", 500, false);
+        }
+    }
+
+    public function getTrending(int $count = 4)
+    {
+        return Build::withCount('likes')->active()->orderBy('likes_count', 'desc')->take($count)->get();
+    }
+
+    public function getPopular(int $count = 4)
+    {
+        return Build::withCount('views')->active()->orderBy('views_count', 'desc')->take($count)->get();
+    }
+
+    public function getRecent(int $count = 4)
+    {
+        return Build::active()->orderBy('created_at', 'desc')->take($count)->get();
     }
 
     private function transformBaseTree(array &$data)

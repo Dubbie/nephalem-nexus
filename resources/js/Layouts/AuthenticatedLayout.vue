@@ -56,10 +56,13 @@ onUnmounted(() => {
                 <nav class="flex flex-1 items-center gap-4 py-2.5">
                     <Link
                         :href="route('home')"
-                        class="rounded-xl px-3 py-1 hover:bg-white/10"
+                        class="flex items-center space-x-3 rounded-xl px-3 py-1 hover:bg-white/10"
                     >
+                        <img src="/img/hamma.png" alt="" class="block size-8" />
                         <span class="max-lg:hidden relative">
-                            <p class="font-black text-white">Nephalem Nexus</p>
+                            <p class="font-black text-white">
+                                {{ $page.props.appName }}
+                            </p>
                         </span>
                     </Link>
                     <div class="max-lg:hidden h-6 w-px bg-white/10"></div>
@@ -73,7 +76,7 @@ onUnmounted(() => {
                         <NavLink
                             :active="route().current('item.*')"
                             :href="route('item.index')"
-                            v-if="$page.props.auth.user.role === 'DEVELOPER'"
+                            v-if="$page.props.auth.user?.role === 'DEVELOPER'"
                         >
                             Items</NavLink
                         >

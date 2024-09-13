@@ -208,6 +208,11 @@ const findSkillByCategoryAndPosition = (categoryId, row, col) => {
 const canAllocateSkill = (skill, ignoreMax = false) => {
     if (!skill) return false;
 
+    if (props.readonly) {
+        // Only highlight skills with points
+        return skill.level > 0;
+    }
+
     // Check if skill has max already
     if (!ignoreMax && skill.level >= skill.max_level) return false;
 

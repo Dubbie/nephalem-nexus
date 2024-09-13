@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Build extends Model
 {
@@ -22,6 +23,9 @@ class Build extends Model
 
     protected $appends = [
         'is_complete',
+        'view_count',
+        'like_count',
+        'liked'
     ];
 
     public function isComplete(): Attribute
@@ -47,6 +51,31 @@ class Build extends Model
     public function sections()
     {
         return $this->hasMany(BuildSection::class)->orderBy('order');
+    }
+
+    public function views()
+    {
+        return $this->hasMany(BuildView::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(BuildLike::class);
+    }
+
+    public function viewCount(): Attribute
+    {
+        return new Attribute(get: fn() => $this->views->count());
+    }
+
+    public function likeCount(): Attribute
+    {
+        return new Attribute(get: fn() => $this->likes->count());
+    }
+
+    public function liked(): Attribute
+    {
+        return new Attribute(get: fn() => $this->likes()->where('user_id', Auth::id())->exists());
     }
 
     public function scopeActive($query)

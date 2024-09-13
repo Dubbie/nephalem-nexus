@@ -40,10 +40,26 @@ class BuildController extends Controller
 
     public function show(Build $build)
     {
+        $this->buildService->handleVisit($build, request()->ip());
+
         return Inertia::render('Build/Show', [
             'build' => $build->load('sections.sectionable', 'diabloClass.skillCategories.skills'),
             'isAuthor' => $build->user_id == Auth::id(),
         ]);
+    }
+
+    public function like(Build $build)
+    {
+        $response = $this->buildService->like($build);
+        $rData = $response->getData(true);
+
+        if ($rData['success']) {
+            $this->toastService->setToast('success', 'Success', $rData['message']);
+        } else {
+            $this->toastService->setToast('error', 'Failed', $rData['message']);
+        }
+
+        return redirect(url()->previous());
     }
 
     public function delete(Build $build)

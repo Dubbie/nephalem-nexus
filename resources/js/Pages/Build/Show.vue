@@ -8,7 +8,8 @@ import BuildSkillTree from "./Partials/BuildSkillTree.vue";
 import AppDivider from "@/Components/AppDivider.vue";
 import AppButton from "@/Components/AppButton.vue";
 import BuildContextSection from "./Partials/BuildContextSection.vue";
-import { IconPencil } from "@tabler/icons-vue";
+import { IconHeart, IconPencil } from "@tabler/icons-vue";
+import LikeIcon from "@/Components/LikeIcon.vue";
 
 const props = defineProps({
     build: Object,
@@ -82,8 +83,17 @@ onMounted(() => {
             <div class="ml-60">
                 <div class="flex justify-between">
                     <div class="mb-6">
-                        <h1 class="text-3xl font-bold">
-                            {{ build.name }} {{ build.diablo_class.name }} Guide
+                        <h1
+                            class="flex items-center space-x-2 text-4xl font-bold mb-1"
+                        >
+                            <span
+                                >{{ build.name }}
+                                {{ build.diablo_class.name }} Guide</span
+                            >
+                            <LikeIcon
+                                :build="build"
+                                v-if="$page.props.auth.user"
+                            />
                         </h1>
                         <p class="text-zinc-500 font-medium text-sm">
                             Last updated:
@@ -105,10 +115,10 @@ onMounted(() => {
                 <div class="space-y-8">
                     <BuildIntroduction
                         class="guide-section"
-                        hide-button="true"
+                        :hide-button="true"
                     />
                     <AppDivider />
-                    <BuildSkillTree class="guide-section" hide-button="true" />
+                    <BuildSkillTree class="guide-section" :hide-button="true" />
                     <template
                         v-for="section in build.sections"
                         :key="section.id"

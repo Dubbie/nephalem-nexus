@@ -24,6 +24,10 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
+    readOnly: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const isSkill = computed(() => {

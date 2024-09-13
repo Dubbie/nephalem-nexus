@@ -80,7 +80,7 @@ const sizeClasses = computed(() => {
             xs: "p-1 text-xs",
             sm: "p-1.5 text-xs",
             md: "p-2 text-sm",
-            lg: "px-4 py-2.5 text-lg",
+            lg: "p-3",
         }[props.size];
     }
 
@@ -88,7 +88,7 @@ const sizeClasses = computed(() => {
         xs: "px-2 py-1 text-xs",
         sm: "px-2.5 py-1.5 text-xs",
         md: "px-3 py-1.5 text-sm",
-        lg: "px-4 py-2.5 text-lg",
+        lg: "px-5 py-2.5 text-sm",
     }[props.size];
 });
 
@@ -97,6 +97,10 @@ const disabledClasses = computed(() => {
 });
 
 const roundClasses = computed(() => {
+    if (props.size === "lg") {
+        return "rounded-xl";
+    }
+
     return props.pill ? "rounded-full" : "rounded-lg";
 });
 

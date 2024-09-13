@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Build;
+use App\Services\BuildService;
 use Inertia\Inertia;
 
 class PageController extends Controller
 {
+    private BuildService $buildService;
+
+    public function __construct(BuildService $buildService)
+    {
+        $this->buildService = $buildService;
+    }
+
     public function home()
     {
-        // Find 5 random builds
-        $trending = Build::active()->inRandomOrder()->limit(5)->get();
-        $latest = Build::active()->latest()->limit(5)->get();
+        $trending = $this->buildService->getTrending(8);
+        $recent = $this->buildService->getRecent(5);
+
         return Inertia::render('Home', [
             'trending' => $trending,
-            'latest' => $latest
+            'recent' => $recent
         ]);
     }
 }

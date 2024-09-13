@@ -1,12 +1,14 @@
 <script setup>
 import AppAlert from "@/Components/AppAlert.vue";
 import AppButton from "@/Components/AppButton.vue";
+import BuildCard from "@/Components/BuildCard.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { IconSearch } from "@tabler/icons-vue";
 import { inject, onMounted, ref, watch } from "vue";
+import BuildsLoading from "./Partials/BuildsLoading.vue";
 
 const builds = ref([]);
 const loading = ref(true);
@@ -74,12 +76,17 @@ watch(
             </h2>
         </template>
 
-        <div class="mb-6">
+        <div class="mb-12">
             <p class="font-semibold text-sm mb-1">Filter</p>
 
             <div class="grid grid-cols-3 gap-6">
                 <div class="col-span-2">
-                    <TextInput v-model="filter.search" class="w-full text-sm" />
+                    <TextInput
+                        v-model="filter.search"
+                        class="w-full text-sm"
+                        aria-placeholder="Search"
+                        placeholder="Start typing to search..."
+                    />
                 </div>
 
                 <div class="col-span-1">
@@ -101,75 +108,18 @@ watch(
                 leave-to-class="opacity-0"
                 mode="out-in"
             >
-                <div v-if="loading">
-                    <div class="grid grid-cols-3 gap-6">
-                        <div
-                            v-for="i in 6"
-                            :key="i"
-                            class="ring-2 rounded-xl ring-transparent"
-                        >
-                            <div class="bg-zinc-800 rounded-xl p-4 select-none">
-                                <p class="text-lg font-bold opacity-0">b</p>
-                                <div class="flex items-center justify-between">
-                                    <p
-                                        class="text-sm text-zinc-400 font-semibold opacity-0"
-                                    >
-                                        c
-                                    </p>
-                                    <div class="flex space-x-2 items-center">
-                                        <p
-                                            class="text-xs text-zinc-500 font-semibold opacity-0"
-                                        >
-                                            a
-                                        </p>
-                                        <div
-                                            class="size-4 rounded-md"
-                                            alt=""
-                                        ></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <BuildsLoading v-if="loading" />
                 <div v-else>
                     <div
                         v-if="builds.length > 0"
-                        class="grid grid-cols-3 gap-6"
+                        class="grid grid-cols-4 gap-6"
                     >
-                        <Link
+                        <BuildCard
                             :href="route('build.show', build)"
                             v-for="build in builds"
                             :key="build.id"
-                            class="ring-2 rounded-xl ring-transparent hover:ring-blue-500"
-                        >
-                            <div class="bg-zinc-800 rounded-xl p-4">
-                                <p class="text-lg font-bold">
-                                    {{ build.name }}
-                                </p>
-                                <div class="flex items-center justify-between">
-                                    <p
-                                        class="text-sm text-zinc-400 font-semibold"
-                                    >
-                                        {{ build.diablo_class.name }}
-                                    </p>
-                                    <div class="flex space-x-2 items-center">
-                                        <p
-                                            class="text-xs text-zinc-500 font-semibold"
-                                        >
-                                            {{ build.author.name }}
-                                        </p>
-                                        <img
-                                            :src="
-                                                build.author.profile_photo_url
-                                            "
-                                            class="size-4 rounded-md"
-                                            alt=""
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
+                            :build="build"
+                        />
                     </div>
                     <div v-else>
                         <AppAlert>

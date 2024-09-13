@@ -5,6 +5,7 @@ use App\Http\Controllers\BuildController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -36,6 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/waiting-for-approval', [BuildApproveController::class, 'index'])->name('build.wfa');
     Route::post('/guide/{build}/approve', [BuildApproveController::class, 'approve'])->name('build.approve');
     Route::post('/guide/{build}/decline', [BuildApproveController::class, 'decline'])->name('build.decline');
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
+    });
 });
 
 Route::get('/guide/{build}', [BuildController::class, 'show'])->name('build.show');

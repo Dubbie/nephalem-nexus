@@ -25,7 +25,7 @@ const sections = computed(() => {
             <!-- Author -->
             <div class="p-2">
                 <Link
-                    href="#!"
+                    :href="route('user.show', build.author)"
                     class="flex items-center space-x-3 p-2 rounded-xl -m-2 hover:bg-white/10"
                 >
                     <img

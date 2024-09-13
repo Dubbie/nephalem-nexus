@@ -5,6 +5,7 @@ import MyBuildsTable from "./Partials/MyBuildsTable.vue";
 import AppAlert from "@/Components/AppAlert.vue";
 import AppButton from "@/Components/AppButton.vue";
 import { inject } from "vue";
+import EmptyState from "@/Components/EmptyState.vue";
 
 const props = defineProps({
     builds: Array,
@@ -28,22 +29,18 @@ const emitter = inject("emitter");
                 <MyBuildsTable :builds="props.builds" />
             </div>
             <div v-else>
-                <AppAlert>
-                    <div class="text-sm">
-                        <p class="text-white text-3xl font-bold mb-6">
-                            You have no guides yet.
-                        </p>
-                        <p class="mb-2">
-                            Would you like to make a new one now?
-                        </p>
+                <EmptyState
+                    title="No guides found"
+                    description="It seems like you don't have any guides yet."
+                >
+                    <template #action>
                         <AppButton
                             color="blue"
                             @click="emitter.emit('open-new-guide-modal')"
+                            >Create Guide</AppButton
                         >
-                            New Guide
-                        </AppButton>
-                    </div>
-                </AppAlert>
+                    </template>
+                </EmptyState>
             </div>
         </div>
     </AuthenticatedLayout>

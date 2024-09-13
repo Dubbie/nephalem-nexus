@@ -9,6 +9,7 @@ import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { IconSearch } from "@tabler/icons-vue";
 import { inject, onMounted, ref, watch } from "vue";
 import BuildsLoading from "./Partials/BuildsLoading.vue";
+import EmptyState from "@/Components/EmptyState.vue";
 
 const builds = ref([]);
 const loading = ref(true);
@@ -122,38 +123,34 @@ watch(
                         />
                     </div>
                     <div v-else>
-                        <AppAlert>
-                            <div
-                                class="flex-1 flex flex-col items-center text-center py-6"
+                        <template v-if="filter.isDirty">
+                            <EmptyState
+                                title="No guides found"
+                                description="Your search did not match any guides. Please try again."
                             >
-                                <div
-                                    class="bg-blue-400/15 text-blue-400 p-4 rounded-full mb-6"
-                                >
-                                    <IconSearch
-                                        class="size-8"
-                                        stroke-width="2"
-                                    />
-                                </div>
-
-                                <h3 class="text-2xl font-bold text-white">
-                                    No guides published
-                                </h3>
-                                <p class="text-zinc-500 mb-3">
-                                    Seems like nobody created any guides yet.
-                                </p>
-
-                                <p class="text-zinc-500 mb-1">
-                                    Would you like to create one?
-                                </p>
-                                <AppButton
-                                    color="blue"
-                                    @click="
-                                        emitter.emit('open-new-guide-modal')
-                                    "
-                                    >New Guide</AppButton
-                                >
-                            </div>
-                        </AppAlert>
+                                <template #action>
+                                    <AppButton outline @click="filter.reset()"
+                                        >Clear search</AppButton
+                                    >
+                                </template>
+                            </EmptyState>
+                        </template>
+                        <template v-else>
+                            <EmptyState
+                                title="No guides found"
+                                description="It seems like we don't have any guides yet."
+                            >
+                                <template #action>
+                                    <AppButton
+                                        color="blue"
+                                        @click="
+                                            emitter.emit('open-new-guide-modal')
+                                        "
+                                        >Create Guide</AppButton
+                                    >
+                                </template>
+                            </EmptyState>
+                        </template>
                     </div>
                 </div>
             </transition>

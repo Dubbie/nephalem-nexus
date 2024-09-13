@@ -4,6 +4,8 @@ import { Head } from "@inertiajs/vue3";
 import AppAlert from "@/Components/AppAlert.vue";
 import { inject } from "vue";
 import ApproveList from "./Partials/ApproveList.vue";
+import EmptyState from "@/Components/EmptyState.vue";
+import { IconCheck } from "@tabler/icons-vue";
 
 const props = defineProps({
     builds: Array,
@@ -27,16 +29,11 @@ const emitter = inject("emitter");
                 <ApproveList :builds="props.builds" />
             </div>
             <div v-else>
-                <AppAlert>
-                    <div class="text-sm">
-                        <p class="text-white text-3xl font-bold mb-6">
-                            You have no guides waiting to approve!
-                        </p>
-                        <p class="mb-2">
-                            You did good. Be sure to check back later.
-                        </p>
-                    </div>
-                </AppAlert>
+                <EmptyState
+                    :icon="IconCheck"
+                    title="No guides waiting for approval"
+                    description="There are no guides waiting for approval."
+                />
             </div>
         </div>
     </AuthenticatedLayout>

@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Build::class);
     }
+
+    public function approvedBuilds()
+    {
+        return $this->builds()->approved();
+    }
 }

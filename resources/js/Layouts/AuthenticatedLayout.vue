@@ -5,10 +5,17 @@ import NavLink from "@/Components/NavLink.vue";
 import NewBuildModal from "@/Components/NewBuildModal.vue";
 import AppFooter from "@/Layouts/Partials/AppFooter.vue";
 import { inject, onMounted, onUnmounted, ref } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import AppToast from "@/Components/AppToast.vue";
 import DeleteGuideModal from "@/Components/DeleteGuideModal.vue";
 import DeclineGuideModal from "@/Components/DeclineGuideModal.vue";
+
+const props = defineProps({
+    title: {
+        type: String,
+        default: null,
+    },
+});
 
 const emitter = inject("emitter");
 const showingNewGuideModal = ref(false);
@@ -45,6 +52,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <Head :title="title" />
     <div
         class="relative isolate flex min-h-svh w-full flex-col bg-zinc-900 lg:bg-zinc-950"
     >

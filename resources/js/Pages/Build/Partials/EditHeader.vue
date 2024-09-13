@@ -1,6 +1,7 @@
 <script setup>
 import AppButton from "@/Components/AppButton.vue";
 import { useForm } from "@inertiajs/vue3";
+import { inject } from "vue";
 
 const props = defineProps({
     build: Object,
@@ -9,6 +10,8 @@ const props = defineProps({
 const form = useForm({
     active: props.build.active,
 });
+
+const emitter = inject("emitter");
 
 const updateBuildStatus = () => {
     form.active = !props.build.active;
@@ -23,8 +26,12 @@ const updateBuildStatus = () => {
 
 <template>
     <div class="flex justify-between">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            Guide editing
+        <h2
+            class="font-semibold text-xl text-white leading-tight flex space-x-2 items-center"
+        >
+            <span>Guide editing</span>
+            <span class="text-zinc-600">/</span>
+            <span>{{ props.build.name }}</span>
         </h2>
 
         <div class="flex">
@@ -32,7 +39,7 @@ const updateBuildStatus = () => {
                 plain
                 color="red"
                 class="mr-1"
-                :href="route('build.preview', props.build.id)"
+                @click="emitter.emit('open-delete-guide-modal', props.build)"
                 >Delete</AppButton
             >
             <AppButton

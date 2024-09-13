@@ -62,6 +62,15 @@ onMounted(() => {
         if (item.armor) {
             // Shield
             if (item.type === "shie") {
+                // Check if 2 hander in left hand
+                if (
+                    form.larm &&
+                    form.larm.weapon.damage_type === "Two-Hand Damage"
+                ) {
+                    form.larm = null;
+                    form.rarm = null;
+                }
+
                 form.rarm = item;
             }
             // Torso
@@ -133,8 +142,9 @@ onUnmounted(() => {
                         </p>
                         <p>
                             If you know how the game handles the properties,
-                            stats using the files found in the .mpq files and
-                            would like to help, please message me on discord:
+                            stats using the .mpq files and would like to
+                            help,<br />
+                            please message me on discord:
                             <span
                                 class="text-white bg-black/30 px-1 py-0.5 rounded-md"
                                 >subesz#subesz</span
@@ -166,6 +176,10 @@ onUnmounted(() => {
                             :rrin="form.rrin"
                             :amul="form.amul"
                         />
+
+                        <p class="text-xs text-zinc-400 mt-2 text-center">
+                            Yes, I know this is the wrong inventory image.
+                        </p>
                     </div>
                 </div>
             </div>

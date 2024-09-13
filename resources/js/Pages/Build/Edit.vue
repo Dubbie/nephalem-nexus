@@ -41,14 +41,6 @@ const submit = () => {
             <div class="col-span-3 text-sm">
                 <h3 class="text-xl font-bold mb-6 text-white">Basics</h3>
 
-                <AppAlert color="yellow" :icon="IconInfoCircle">
-                    <div>
-                        <p class="font-bold text-white">
-                            The Gear & Charms section is not implemented yet.
-                        </p>
-                    </div>
-                </AppAlert>
-
                 <div class="space-y-3 mt-6">
                     <div>
                         <ClassChooser v-model="form.diablo_class_id" />

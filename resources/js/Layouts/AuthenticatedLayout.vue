@@ -7,9 +7,12 @@ import AppFooter from "@/Layouts/Partials/AppFooter.vue";
 import { inject, onMounted, onUnmounted, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 import AppToast from "@/Components/AppToast.vue";
+import DeleteGuideModal from "@/Components/DeleteGuideModal.vue";
 
 const emitter = inject("emitter");
 const showingNewGuideModal = ref(false);
+const showingDeleteGuideModal = ref(false);
+const selectedBuild = ref(null);
 
 const setupAccordions = () => {
     const accordions = document.querySelectorAll(".accordion");
@@ -108,6 +111,7 @@ onUnmounted(() => {
             :show="showingNewGuideModal"
             @close="showingNewGuideModal = false"
         />
+        <DeleteGuideModal />
     </div>
 </template>
 

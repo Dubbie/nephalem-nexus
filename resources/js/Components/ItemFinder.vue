@@ -53,7 +53,7 @@ watch(form, () => {
 <template>
     <div>
         <div class="mb-6">
-            <InputLabel for="search" value="Search" />
+            <InputLabel for="search" value="Search" class="pb-1" />
             <TextInput
                 id="search"
                 type="text"

@@ -46,6 +46,19 @@ class BuildController extends Controller
         ]);
     }
 
+    public function delete(Build $build)
+    {
+        $response = $this->buildService->delete($build);
+        $rData = $response->getData(true);
+
+        if ($rData['success']) {
+            $this->toastService->setToast('success', 'Deleted', $rData['message']);
+        } else {
+            $this->toastService->setToast('error', 'Delete Failed', $rData['message']);
+        }
+
+        return redirect(route('build.own.index'));
+    }
 
     public function myBuilds()
     {

@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/guide/own', [BuildController::class, 'myBuilds'])->name('build.own.index');
     Route::get('/guide/{build}/preview', [BuildController::class, 'preview'])->name('build.preview');
+    Route::delete('/guide/{build}/delete', [BuildController::class, 'delete'])->name('build.destroy');
     Route::get('/guide/{build}/edit', [BuildController::class, 'edit'])->name('build.edit');
     Route::post('/guide/{build}/update', [BuildController::class, 'update'])->name('build.update');
     Route::get('/guide/{build}/edit/introduction', [BuildController::class, 'editIntroduction'])->name('build.edit.introduction');

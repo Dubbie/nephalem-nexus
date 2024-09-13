@@ -96,6 +96,18 @@ const handleUneqip = ($event, slot) => {
     $event.preventDefault();
     emitter.emit("unequip-item", slot);
 };
+
+const twoHandedInRightHand = () => {
+    if (
+        props.rarm &&
+        props.rarm.weapon &&
+        props.rarm.weapon.damage_type === "Two-Hand Damage"
+    ) {
+        return true;
+    }
+
+    return false;
+};
 </script>
 
 <template>
@@ -107,6 +119,9 @@ const handleUneqip = ($event, slot) => {
             :key="element"
             class="absolute flex justify-center items-center"
             :style="itemPositions[element]"
+            :class="{
+                'opacity-50': element === 'rarm' && twoHandedInRightHand(),
+            }"
         >
             <AppItem
                 v-if="props[element]"

@@ -9,12 +9,12 @@ import { IconSearch } from "@tabler/icons-vue";
 import { inject, onMounted, ref, watch } from "vue";
 
 const builds = ref([]);
-const loading = ref(false);
+const loading = ref(true);
 const emitter = inject("emitter");
 let timer = null;
 
 const filter = useForm({
-    name: "",
+    search: "",
     class_id: null,
 });
 
@@ -26,10 +26,19 @@ const classOptions = [{ value: null, label: "Any class" }].concat(
 
 const getBuilds = () => {
     loading.value = true;
-    axios.get(route("api.build.fetch")).then((response) => {
-        builds.value = response.data.data;
-        loading.value = false;
-    });
+    axios
+        .get(route("api.build.fetch"), {
+            params: filter.data(),
+        })
+        .then((response) => {
+            builds.value = response.data.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        .finally(() => {
+            loading.value = false;
+        });
 };
 
 const handleInput = () => {
@@ -70,7 +79,7 @@ watch(
 
             <div class="grid grid-cols-3 gap-6">
                 <div class="col-span-2">
-                    <TextInput v-model="filter.name" class="w-full text-sm" />
+                    <TextInput v-model="filter.search" class="w-full text-sm" />
                 </div>
 
                 <div class="col-span-1">

@@ -2,10 +2,13 @@
 import AppBadge from "@/Components/AppBadge.vue";
 import { Link } from "@inertiajs/vue3";
 import { IconMaximize, IconPencil, IconTrash } from "@tabler/icons-vue";
+import { inject } from "vue";
 
 const props = defineProps({
     builds: Array,
 });
+
+const emitter = inject("emitter");
 
 const thClasses =
     "px-4 py-2 border-b border-white/10 text-sm/6 font-medium first:pl-0 last:pr-0";
@@ -64,13 +67,14 @@ const getStatusColor = (active) => {
 
                 <td class="text-center" :class="tdClasses">
                     <AppBadge :color="getStatusColor(build.active)">
-                        {{ build.active ? "Active" : "Inactive" }}
+                        {{ build.active ? "Published" : "Hidden" }}
                     </AppBadge>
                 </td>
 
                 <td class="flex justify-end space-x-1" :class="tdClasses">
                     <div
                         class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
+                        @click="emitter.emit('open-delete-guide-modal', build)"
                     >
                         <IconTrash class="size-6" stroke-width="2" />
                     </div>

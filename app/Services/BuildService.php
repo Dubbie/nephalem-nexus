@@ -15,13 +15,21 @@ class BuildService extends ApiService
 {
     public function getFiltered(array $data)
     {
-        $query = Build::active();
+        try {
+            $query = Build::active();
 
-        if (array_key_exists('name', $data)) {
-            $query->where('name', 'like', '%' . $data['name'] . '%');
+            if (array_key_exists('search', $data)) {
+                $query->where('name', 'like', '%' . $data['search'] . '%');
+            }
+
+            if (array_key_exists('class_id', $data)) {
+                $query->where('diablo_class_id', $data['class_id']);
+            }
+
+            return $this->apiResponse($query->get(), "Builds found!");
+        } catch (Exception $e) {
+            return $this->apiResponse(null, 'Error while fetching guides', 500, false);
         }
-
-        return $this->apiResponse($query->get(), "Builds found!");
     }
 
     public function updateBasics(Build $build, array $data)
@@ -38,6 +46,18 @@ class BuildService extends ApiService
             Log::info("Build #{$build->id} basics updated.");
 
             return $this->apiResponse($build, "Build basics updated!");
+        } catch (Exception $e) {
+            return $this->apiResponse(null, $e->getMessage(), 500, false);
+        }
+    }
+
+    public function delete(Build $build)
+    {
+        try {
+            $build->delete();
+            Log::info("Build #{$build->id} deleted.");
+
+            return $this->apiResponse($build, "Build deleted!");
         } catch (Exception $e) {
             return $this->apiResponse(null, $e->getMessage(), 500, false);
         }

@@ -87,7 +87,7 @@ onMounted(() => {
                 <div class="flex justify-between">
                     <div class="mb-6">
                         <h1 class="text-3xl font-bold">
-                            {{ build.name }} {{ build.diablo_class.name }} Guide
+                            {{ build.name }}
                         </h1>
                         <p class="text-zinc-500 font-medium text-sm">
                             Last updated:

@@ -11,7 +11,7 @@ class BuildPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
         return true;
     }
@@ -19,7 +19,7 @@ class BuildPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Build $build): bool
+    public function view(?User $user, Build $build): bool
     {
         // Check if build is published and approved
         if ($build->status === Build::STATUS_APPROVED) {

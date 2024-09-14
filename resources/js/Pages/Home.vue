@@ -2,6 +2,7 @@
 import AppButton from "@/Components/AppButton.vue";
 import BuildCard from "@/Components/BuildCard.vue";
 import BuildCardCompact from "@/Components/BuildCardCompact.vue";
+import EmptyState from "@/Components/EmptyState.vue";
 import HeroSection from "@/Components/HeroSection.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
@@ -61,15 +62,11 @@ const demoMode = ref(false);
             </template>
 
             <template v-else>
-                <div class="col-span-full bg-zinc-800 rounded-xl px-4 py-8">
-                    <div class="flex flex-col items-center">
-                        <p class="text-2xl text-white font-bold mb-2">
-                            No guides published
-                        </p>
-                        <p class="text-sm text-zinc-400 mb-2">
-                            It seems like nobody published any guides yet.
-                        </p>
-                    </div>
+                <div class="col-span-full ring-white/15 rounded-xl ring-1 py-6">
+                    <EmptyState
+                        title="No trending guides"
+                        description="Check back later, once we have some!"
+                    />
                 </div>
             </template>
         </div>
@@ -91,15 +88,11 @@ const demoMode = ref(false);
                 />
             </template>
             <template v-else>
-                <div class="col-span-full bg-zinc-800 rounded-xl px-3 py-6">
-                    <div class="flex flex-col items-center text-center">
-                        <p class="text-lg text-white font-bold mb-2">
-                            No guides yet
-                        </p>
-                        <p class="text-sm text-zinc-400">
-                            Check back later, once we have some
-                        </p>
-                    </div>
+                <div class="col-span-full ring-white/15 rounded-xl ring-1 py-6">
+                    <EmptyState
+                        title="No guides recently"
+                        description="Check back later, once we have some!"
+                    />
                 </div>
             </template>
         </div>

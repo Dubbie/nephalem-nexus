@@ -9,11 +9,14 @@ use App\Models\DiabloClass;
 use App\Models\SkillTree;
 use App\Models\SkillTreeChanges;
 use App\Models\User;
+use App\Notifications\GuidePendingNotification;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class BuildService extends ApiService
 {
@@ -248,6 +251,8 @@ class BuildService extends ApiService
 
     public function updateStatus(Build $build)
     {
+        DB::beginTransaction();
+
         try {
             // Decide based on current status
             $status = match ($build->status) {
@@ -264,10 +269,22 @@ class BuildService extends ApiService
             $build->declined_by = null;
             $build->save();
 
+            if ($status === Build::STATUS_PENDING) {
+                $notificationService = App::make(NotificationService::class);
+                $notificationService->notifyPending($build);
+            }
+
             Log::info("Build #{$build->id} status changed to {$build->status}");
+
+            DB::commit();
 
             return $this->apiResponse($build, "Sent for approval!");
         } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+
             return $this->apiResponse(null, $e->getMessage(), 500, false);
         }
     }
@@ -282,6 +299,10 @@ class BuildService extends ApiService
             $build->save();
 
             Log::info("Build #{$build->id} approved by {$approver->name}");
+
+            $build->refresh();
+            $notificationService = App::make(NotificationService::class);
+            $notificationService->notifyApproved($build);
 
             return $this->apiResponse($build, "Guide approved!");
         } catch (Exception $e) {
@@ -300,6 +321,10 @@ class BuildService extends ApiService
             $build->declined_by = $decliner->id;
             $build->decline_reason = $reason;
             $build->save();
+
+            $build->refresh();
+            $notificationService = App::make(NotificationService::class);
+            $notificationService->notifyDeclined($build);
 
             Log::info("Build #{$build->id} declined by {$decliner->name}");
 

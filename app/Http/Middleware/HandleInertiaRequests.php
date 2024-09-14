@@ -47,7 +47,8 @@ class HandleInertiaRequests extends Middleware
                 'title' => fn() => $request->session()->get('toast.title'),
                 'message' => fn() => $request->session()->get('toast.message'),
                 'duration' => fn() => $request->session()->get('toast.duration'),
-            ]
+            ],
+            'notifications' => fn() => $request->user() ? $request->user()->unreadNotifications : []
         ];
     }
 }

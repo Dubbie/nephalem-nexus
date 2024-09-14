@@ -25,6 +25,7 @@
         "@tabler/icons-vue": "^3.14.0",
         "ckeditor-tailwind-reset": "^1.0.5",
         "mitt": "^3.0.1",
+        "moment": "^2.30.1",
         "vuedraggable": "^4.1.0"
     }
 }

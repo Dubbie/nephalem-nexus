@@ -1,5 +1,6 @@
 <script setup>
 import AppButton from "@/Components/AppButton.vue";
+import AppNotifications from "@/Components/AppNotifications.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { inject } from "vue";
@@ -12,6 +13,8 @@ const emitter = inject("emitter");
         <AppButton color="blue" @click="emitter.emit('open-new-guide-modal')">
             New Guide</AppButton
         >
+
+        <AppNotifications />
 
         <!-- Settings Dropdown -->
         <Dropdown>

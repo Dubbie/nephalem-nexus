@@ -9,12 +9,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSHKEY }}
 
+      - name: Test SSH Connection
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'echo "SSH works!"'
+
       - name: Run deployment script
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'cd /var/www/sanctuary-forge && ./.scripts/deploy.sh'
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+            # Navigate to the project directory
+            cd /var/www/sanctuary-forge
+
+            # Ensure the script is executable
+            chmod +x .scripts/deploy.sh
+
+            # Run the deployment script
+            ./.scripts/deploy.sh
+          EOF

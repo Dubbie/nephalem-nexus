@@ -1,7 +1,12 @@
 <script setup>
 import AppBadge from "@/Components/AppBadge.vue";
 import { Link } from "@inertiajs/vue3";
-import { IconMaximize, IconPencil, IconTrash } from "@tabler/icons-vue";
+import {
+    IconEye,
+    IconMaximize,
+    IconPencil,
+    IconTrash,
+} from "@tabler/icons-vue";
 import { inject } from "vue";
 
 const props = defineProps({
@@ -68,7 +73,7 @@ const toTitleCase = (str) => {
         </thead>
 
         <tbody>
-            <tr v-for="build in builds">
+            <tr v-for="build in builds" class="group">
                 <td class="text-left" :class="tdClasses">
                     <p class="font-semibold">{{ build.name }}</p>
                 </td>
@@ -89,27 +94,33 @@ const toTitleCase = (str) => {
                     </AppBadge>
                 </td>
 
-                <td class="flex justify-end space-x-1" :class="tdClasses">
+                <td :class="tdClasses">
                     <div
-                        class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
-                        @click="emitter.emit('open-delete-guide-modal', build)"
+                        class="flex justify-end space-x-1 opacity-0 group-hover:opacity-100"
                     >
-                        <IconTrash class="size-6" stroke-width="2" />
+                        <div
+                            class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
+                            @click="
+                                emitter.emit('open-delete-guide-modal', build)
+                            "
+                        >
+                            <IconTrash class="size-6" stroke-width="2" />
+                        </div>
+                        <Link :href="route('build.edit', build.id)">
+                            <div
+                                class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
+                            >
+                                <IconPencil class="size-6" stroke-width="2" />
+                            </div>
+                        </Link>
+                        <Link :href="route('build.preview', build.id)">
+                            <div
+                                class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
+                            >
+                                <IconEye class="size-6" stroke-width="2" />
+                            </div>
+                        </Link>
                     </div>
-                    <Link :href="route('build.edit', build.id)">
-                        <div
-                            class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
-                        >
-                            <IconPencil class="size-6" stroke-width="2" />
-                        </div>
-                    </Link>
-                    <Link :href="route('build.preview', build.id)">
-                        <div
-                            class="p-2 rounded-xl text-zinc-500 cursor-pointer hover:text-white hover:bg-white/10"
-                        >
-                            <IconMaximize class="size-6" stroke-width="2" />
-                        </div>
-                    </Link>
                 </td>
             </tr>
         </tbody>

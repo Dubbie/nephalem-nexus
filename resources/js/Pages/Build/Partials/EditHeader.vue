@@ -1,7 +1,7 @@
 <script setup>
 import AppButton from "@/Components/AppButton.vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 
 const props = defineProps({
     build: {
@@ -11,7 +11,7 @@ const props = defineProps({
 });
 
 const form = useForm({});
-
+const showingInstructions = ref(false);
 const emitter = inject("emitter");
 
 const buttonLabel = computed(() => {
@@ -42,6 +42,14 @@ const hasIntroduction = computed(() => {
 
 const hasSkillTree = computed(() => {
     return props.build.skill_trees[0] ? true : false;
+});
+
+const btnDisabled = computed(() => {
+    return !props.build.is_complete || props.build.status === "pending";
+});
+
+const btnColor = computed(() => {
+    return props.build.status !== "approved" ? "green" : "blue";
 });
 </script>
 
@@ -75,48 +83,66 @@ const hasSkillTree = computed(() => {
                     :href="route('build.preview', props.build.id)"
                     >Preview</AppButton
                 >
-                <div class="flex items-center space-x-6">
-                    <AppButton
-                        @click="updateStatus"
-                        :color="
-                            props.build.status === 'approved' ? 'blue' : 'green'
-                        "
-                        :disabled="
-                            !props.build.is_complete ||
-                            props.build.status === 'pending'
-                        "
-                        >{{ buttonLabel }}</AppButton
+                <div class="relative">
+                    <div
+                        @mouseenter="showingInstructions = true"
+                        @mouseleave="showingInstructions = false"
                     >
-                    <div v-if="!hasIntroduction || !hasSkillTree">
-                        <p class="flex justify-between space-x-2 text-xs">
-                            <span class="text-zinc-400">Introduction:</span>
-                            <span
-                                class="text-right"
-                                :class="
-                                    hasIntroduction
-                                        ? 'text-green-500'
-                                        : 'text-red-500'
-                                "
-                                >{{
-                                    hasIntroduction ? "Complete" : "Missing"
-                                }}</span
-                            >
-                        </p>
-                        <p class="flex justify-between space-x-2 text-xs">
-                            <span class="text-zinc-400">Skill Tree:</span>
-                            <span
-                                class="text-right"
-                                :class="
-                                    hasSkillTree
-                                        ? 'text-green-500'
-                                        : 'text-red-500'
-                                "
-                                >{{
-                                    hasSkillTree ? "Complete" : "Missing"
-                                }}</span
-                            >
-                        </p>
+                        <AppButton
+                            :color="btnColor"
+                            :disabled="btnDisabled"
+                            @click="updateStatus"
+                            >{{ buttonLabel }}</AppButton
+                        >
                     </div>
+
+                    <transition
+                        enter-active-class="transition transform origin-top-right ease-out duration-200"
+                        enter-from-class="opacity-0 scale-90"
+                        enter-to-class="opacity-100 scale-100"
+                        leave-active-class="transition transform origin-top-right ease-in duration-150"
+                        leave-from-class="opacity-100 scale-100"
+                        leave-to-class="opacity-0 scale-90"
+                    >
+                        <div
+                            v-if="!hasIntroduction || !hasSkillTree"
+                            class="absolute top-full mt-2 right-0 bg-black/60 p-3 rounded-xl min-w-64"
+                            v-show="showingInstructions"
+                        >
+                            <p class="text-xs mb-3">
+                                In order to publish your build guide, you need
+                                to fill out the following sections:
+                            </p>
+                            <p class="flex justify-between space-x-2 text-xs">
+                                <span class="text-zinc-400">Introduction:</span>
+                                <span
+                                    class="text-right"
+                                    :class="
+                                        hasIntroduction
+                                            ? 'text-green-500'
+                                            : 'text-red-500'
+                                    "
+                                    >{{
+                                        hasIntroduction ? "Complete" : "Missing"
+                                    }}</span
+                                >
+                            </p>
+                            <p class="flex justify-between space-x-2 text-xs">
+                                <span class="text-zinc-400">Skill Tree:</span>
+                                <span
+                                    class="text-right"
+                                    :class="
+                                        hasSkillTree
+                                            ? 'text-green-500'
+                                            : 'text-red-500'
+                                    "
+                                    >{{
+                                        hasSkillTree ? "Complete" : "Missing"
+                                    }}</span
+                                >
+                            </p>
+                        </div>
+                    </transition>
                 </div>
             </div>
         </div>

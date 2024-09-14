@@ -61,4 +61,6 @@ test/
 
 dist/
 
+.scripts/
+
 # End of https://www.toptal.com/developers/gitignore/api/laravel,visualstudiocode,vue,vuejs

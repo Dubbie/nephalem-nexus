@@ -6,43 +6,43 @@
 	}
 }
 
-.main-container {
+#main-content .main-container {
 	font-family: 'Lato';
 	width: fit-content;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.ck-content {
+#main-content .ck-content {
 	font-family: 'Lato';
 	line-height: 1.6;
 	word-break: break-word;
 }
 
-.ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content
+#main-content .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content
 {
     border: none;
 }
 
-.editor-container_classic-editor .editor-container__editor {
+#main-content .editor-container_classic-editor .editor-container__editor {
 	min-width: 400px;
 	max-width: 100%;
 }
 
-.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+#main-content .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
     border-color: rgba(255,255,255,0.1);
 }
 
-.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
-.ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+#main-content .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+#main-content .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
     border-radius: var(--ck-border-radius);
 }
 
-.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable {
+#main-content .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable {
     margin-top: 1rem;
 }
 
-:root {
+#main-content {
     /* Overrides the border radius setting in the theme. */
     --ck-border-radius: 0.5rem;
 

@@ -9,7 +9,7 @@ import { CkeditorPlugin } from '@ckeditor/ckeditor5-vue';
 import mitt from 'mitt';
 
 const emitter = new mitt();
-const appName = import.meta.env.VITE_APP_NAME || 'Nephalem Nexus';
+const appName = import.meta.env.VITE_APP_NAME || 'Sanctuary Forge';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

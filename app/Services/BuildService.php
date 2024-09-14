@@ -3,23 +3,26 @@
 namespace App\Services;
 
 use App\Models\Build;
-use App\Models\BuildView;
 use App\Models\ContentSection;
-use App\Models\DiabloClass;
 use App\Models\SkillTree;
 use App\Models\SkillTreeChanges;
 use App\Models\User;
-use App\Notifications\GuidePendingNotification;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class BuildService extends ApiService
 {
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     public function getFiltered(array $data)
     {
         try {

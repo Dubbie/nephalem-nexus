@@ -57,8 +57,17 @@ class User extends Authenticatable
 
     public function profilePhotoUrl(): Attribute
     {
+        $url = "";
+
+        if ($this->profile_photo) {
+            $url = asset('storage/' . $this->profile_photo);
+        } else {
+            $hash = md5(strtolower(trim($this->attributes['email'])));
+            $url = "https://www.gravatar.com/avatar/$hash";
+        }
+
         return Attribute::make(
-            get: fn() => $this->profile_photo ? asset('storage/' . $this->profile_photo) : asset('img/avatar.png')
+            get: fn() => $url
         );
     }
 

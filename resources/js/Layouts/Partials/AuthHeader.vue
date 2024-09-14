@@ -28,6 +28,12 @@ const emitter = inject("emitter");
             </template>
 
             <template #content>
+                <div class="px-3 py-1">
+                    <p class="text-xs text-zinc-600 mb-1">Logged in as</p>
+                    <p class="text-sm font-semibold text-zinc-400">
+                        {{ $page.props.auth.user.name }}
+                    </p>
+                </div>
                 <DropdownLink :href="route('logout')" method="post" as="button">
                     Log Out
                 </DropdownLink>

@@ -6,6 +6,9 @@ set -e
 # Print each command before executing it (for debugging purposes)
 set -x
 
+# Load profile
+source ~/.bashrc
+
 # Navigate to the project directory
 cd /var/www/sanctuary-forge
 

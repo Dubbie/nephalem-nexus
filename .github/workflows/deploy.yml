@@ -1,23 +1,23 @@
-name: Deploy to Server
+name: Deploy
 
+# Trigger the workflow on push to main branch
 on:
   push:
     branches:
       - main
 
+# Authenticate to the the server via ssh
+# and run our deployment script
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      - uses: actions/checkout@v2
       - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "bash /var/www/sanctuary-forge/deploy.sh"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSHKEY }}
+          script: "cd /var/www/sanctuary-forge && ./.scripts/deploy.sh"

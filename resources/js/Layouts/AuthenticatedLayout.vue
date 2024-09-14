@@ -9,6 +9,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import AppToast from "@/Components/AppToast.vue";
 import DeleteGuideModal from "@/Components/DeleteGuideModal.vue";
 import DeclineGuideModal from "@/Components/DeclineGuideModal.vue";
+import AppNavigation from "@/Components/AppNavigation.vue";
 
 const props = defineProps({
     title: {
@@ -76,19 +77,7 @@ onUnmounted(() => {
                     </Link>
                     <div class="max-lg:hidden h-6 w-px bg-white/10"></div>
                     <div class="max-lg:hidden flex items-center gap-3">
-                        <NavLink
-                            :active="route().current('build.*')"
-                            :href="route('build.index')"
-                        >
-                            Guides</NavLink
-                        >
-                        <NavLink
-                            :active="route().current('item.*')"
-                            :href="route('item.index')"
-                            v-if="$page.props.auth.user?.role === 'DEVELOPER'"
-                        >
-                            Items</NavLink
-                        >
+                        <AppNavigation />
                     </div>
                     <div class="-ml-4 flex-1"></div>
 

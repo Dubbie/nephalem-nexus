@@ -87,10 +87,6 @@ onMounted(() => {
                             class="flex items-center space-x-2 text-4xl font-bold mb-1"
                         >
                             <span>{{ build.name }}</span>
-                            <LikeIcon
-                                :build="build"
-                                v-if="$page.props.auth.user"
-                            />
                         </h1>
                         <p class="text-zinc-500 font-medium text-sm">
                             Last updated:
@@ -98,7 +94,7 @@ onMounted(() => {
                         </p>
                     </div>
 
-                    <div>
+                    <div class="flex space-x-2 items-start">
                         <AppButton
                             outline
                             :href="route('build.edit', build)"
@@ -107,6 +103,7 @@ onMounted(() => {
                             <IconPencil class="size-4" stroke-width="2" />
                             <span>Edit guide</span></AppButton
                         >
+                        <LikeIcon :build="build" v-if="$page.props.auth.user" />
                     </div>
                 </div>
                 <div class="space-y-8">

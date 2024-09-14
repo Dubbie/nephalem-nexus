@@ -1,14 +1,14 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { onMounted, provide, ref } from "vue";
+import { inject, onMounted, provide, ref } from "vue";
 import BuildSidebar from "./Partials/BuildSidebar.vue";
 import BuildIntroduction from "./Partials/BuildIntroduction.vue";
 import BuildSkillTree from "./Partials/BuildSkillTree.vue";
 import AppDivider from "@/Components/AppDivider.vue";
 import AppButton from "@/Components/AppButton.vue";
 import BuildContextSection from "./Partials/BuildContextSection.vue";
-import { IconHeart, IconPencil } from "@tabler/icons-vue";
+import { IconPencil } from "@tabler/icons-vue";
 import LikeIcon from "@/Components/LikeIcon.vue";
 
 const props = defineProps({
@@ -20,6 +20,7 @@ const props = defineProps({
 });
 
 provide("build", props.build);
+const emitter = inject("emitter");
 const activeSection = ref(null);
 
 const setupScrollSpy = () => {
@@ -95,6 +96,19 @@ onMounted(() => {
                     </div>
 
                     <div class="flex space-x-2 items-start">
+                        <AppButton
+                            v-if="
+                                $page.props.auth.user?.role === 'ADMIN' ||
+                                $page.props.auth.user?.role === 'DEVELOPER'
+                            "
+                            outline
+                            color="red"
+                            @click="
+                                emitter.emit('open-decline-guide-modal', build)
+                            "
+                        >
+                            <span>Remove</span>
+                        </AppButton>
                         <AppButton
                             outline
                             :href="route('build.edit', build)"

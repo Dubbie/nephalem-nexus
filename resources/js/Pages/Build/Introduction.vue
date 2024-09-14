@@ -7,8 +7,8 @@ import EditHeader from "./Partials/EditHeader.vue";
 import { IconInfoCircle } from "@tabler/icons-vue";
 import InputError from "@/Components/InputError.vue";
 import AppButton from "@/Components/AppButton.vue";
-import EditorInput from "@/Components/EditorInput.vue";
 import AppAlert from "@/Components/AppAlert.vue";
+import CKEditorInput from "@/Components/CKEditorInput.vue";
 
 const props = defineProps({
     build: Object,
@@ -53,7 +53,8 @@ const submit = () => {
                                 value="Content"
                                 class="mb-1"
                             />
-                            <EditorInput v-model="form.introduction" />
+
+                            <CKEditorInput v-model="form.introduction" />
 
                             <InputError
                                 class="mt-2"

@@ -81,7 +81,7 @@ onBeforeMount(() => {
 
             <div
                 v-html="build.skill_trees[0].description"
-                class="guide-section-content prose prose-invert prose-zinc mt-6"
+                class="guide-section-content ck-content mt-6"
             ></div>
 
             <div v-if="isAuthor && !hideButton" class="flex justify-end mt-6">

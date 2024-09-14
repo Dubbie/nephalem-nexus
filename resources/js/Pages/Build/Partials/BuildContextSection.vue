@@ -1,5 +1,6 @@
 <script setup>
 import BuildSectionTitle from "./BuildSectionTitle.vue";
+import "ckeditor5/ckeditor5.css";
 
 const props = defineProps({
     section: {
@@ -17,7 +18,7 @@ console.log(props.section);
 
         <div
             v-html="section.sectionable.content"
-            class="guide-section-content prose prose-invert prose-zinc"
+            class="guide-section-content ck-content"
         ></div>
     </div>
 </template>

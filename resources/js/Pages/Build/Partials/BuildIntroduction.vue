@@ -1,9 +1,10 @@
 <script setup>
-import AppButton from "@/Components/AppButton.vue";
-import EmptyState from "@/Components/EmptyState.vue";
 import { usePage } from "@inertiajs/vue3";
 import { IconExclamationMark } from "@tabler/icons-vue";
 import { inject } from "vue";
+import "ckeditor5/ckeditor5.css";
+import AppButton from "@/Components/AppButton.vue";
+import EmptyState from "@/Components/EmptyState.vue";
 
 const build = inject("build");
 const props = defineProps({
@@ -20,7 +21,7 @@ const isAuthor = usePage().props.auth.user?.id === build.user_id;
         <template v-if="build.introduction">
             <div
                 v-html="build.introduction"
-                class="guide-section-content prose prose-invert prose-zinc w-full"
+                class="guide-section-content ck-content"
             ></div>
 
             <div v-if="isAuthor && !hideButton" class="flex justify-end mt-6">

@@ -1,7 +1,7 @@
 <script setup>
 // Import necessary libraries and components
 import { ref, watch } from "vue";
-import EditorInput from "@/Components/EditorInput.vue";
+import CKEditorInput from "@/Components/CKEditorInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 import {
     IconCheck,
@@ -47,7 +47,7 @@ const updateTitle = () => {
             </div>
 
             <!-- Title and Actions -->
-            <div class="flex-1">
+            <div class="w-full max-w-full">
                 <div
                     class="flex items-center space-x-6 justify-between group"
                     v-if="!editingTitle"
@@ -113,9 +113,9 @@ const updateTitle = () => {
                 </div>
 
                 <!-- Content Area -->
-                <div v-show="show">
+                <div v-show="show" class="max-w-full">
                     <hr class="border-none h-px bg-white/10 mb-3 mt-2" />
-                    <EditorInput v-model="section.content" />
+                    <CKEditorInput v-model="section.content" />
                 </div>
             </div>
         </div>

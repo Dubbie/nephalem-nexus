@@ -7,7 +7,7 @@ import AppButton from "@/Components/AppButton.vue";
 import { onBeforeMount } from "vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import EditHeader from "./Partials/EditHeader.vue";
-import EditorInput from "@/Components/EditorInput.vue";
+import CKEditorInput from "@/Components/CKEditorInput.vue";
 
 const props = defineProps({
     build: Object,
@@ -55,7 +55,7 @@ const setupTree = () => {
         const baseSkillData = skillTreeData.base_skills;
 
         // Load the notes section
-        form.description = skillTreeData.description;
+        form.description = skillTreeData.description ?? "";
 
         // Load tree
         form.base_tree = props.classData;
@@ -117,10 +117,9 @@ onBeforeMount(() => {
 
                 <div class="mt-4">
                     <InputLabel for="skill_notes" value="Skill notes" />
-                    <EditorInput
+                    <CKEditorInput
                         id="skill_notes"
                         v-model="form.description"
-                        class="mt-1 block w-full"
                     />
                 </div>
 

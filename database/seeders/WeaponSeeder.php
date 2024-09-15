@@ -4,46 +4,17 @@ namespace Database\Seeders;
 
 use App\Models\Item;
 use App\Models\Weapon;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class WeaponSeeder extends Seeder
+class WeaponSeeder extends FromFileSeeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // Delete all item properties
-        DB::table('items')->delete();
-
-        $data = $this->getDataFromFile();
+        Weapon::query()->delete();
+        $data = $this->readFile('app/Weapons.txt');
         $this->create($data);
-    }
-
-    private function getDataFromFile(): array
-    {
-        // Read the file line by line
-        $properties = file(storage_path('app/Weapons.txt'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-        // Get headers
-        $headers = explode("\t", $properties[0]);
-
-        // Loop through the lines
-        $data = [];
-        for ($line = 1; $line < count($properties); $line++) {
-            $split = explode("\t", $properties[$line]);
-
-            $property = [];
-            foreach ($split as $index => $value) {
-                $header = $headers[$index];
-                $property[$header] = $value;
-            }
-
-            $data[] = $property;
-        }
-
-        return $data;
     }
 
     private function create(array $data): void
@@ -53,25 +24,8 @@ class WeaponSeeder extends Seeder
                 continue;
             }
 
-            // Create the base item
-            $item = Item::create([
-                'name' => $row['name'],
-                'code' => $row['code'],
-                'type' => $row['type'],
-                'gfx_base' => $row['invfile'],
-                'gfx_unique' => $row['uniqueinvfile'],
-                'gfx_set' => $row['setinvfile'],
-                'level_requirement' => $row['levelreq'],
-                'width' => $row['invwidth'],
-                'height' => $row['invheight'],
-                'max_sockets' => $row['gemsockets'] === '' ? 0 : $row['gemsockets'],
-                'required_strength' => $row['reqstr'] === '' ? 0 : $row['reqstr'],
-                'required_dexterity' => $row['reqdex'] === '' ? 0 : $row['reqdex'],
-            ]);
-
             // Create the weapon-specific entry
-            Weapon::create([
-                'item_id' => $item->id,
+            $weapon = Weapon::create([
                 'min_damage' => $row['mindam'] === '' ? null : $row['mindam'],
                 'max_damage' => $row['maxdam'] === '' ? null : $row['maxdam'],
                 'min_two_handed_damage' => $row['2handmindam'] === '' ? null : $row['2handmindam'],
@@ -80,7 +34,23 @@ class WeaponSeeder extends Seeder
                 'max_missile_damage' => $row['maxmisdam'] === '' ? null : $row['maxmisdam'],
                 'speed' => $row['speed'] === '' ? null : $row['speed'],
                 'has_splash' => $row['rangeadder'] !== '' ? true : false,
+                'required_strength' => $row['reqstr'] === '' ? 0 : $row['reqstr'],
+                'required_dexterity' => $row['reqdex'] === '' ? 0 : $row['reqdex'],
             ]);
+
+            // Create the base item
+            $item = new Item([
+                'name' => $row['name'],
+                'code' => $row['code'],
+                'type' => $row['type'],
+                'gfx' => $row['invfile'],
+                'level_requirement' => $row['levelreq'],
+                'width' => $row['invwidth'],
+                'height' => $row['invheight'],
+                'max_sockets' => $row['gemsockets'] === '' ? 0 : $row['gemsockets'],
+            ]);
+
+            $weapon->item()->save($item);
         }
     }
 }

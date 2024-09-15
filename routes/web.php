@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AffixController;
 use App\Http\Controllers\BuildApproveController;
 use App\Http\Controllers\BuildController;
 use App\Http\Controllers\ItemController;
@@ -13,6 +14,8 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 
 Route::get('/guide', [BuildController::class, 'index'])->name('build.index');
 Route::get('/item', [ItemController::class, 'index'])->name('item.index');
+Route::get('/item/unique', [ItemController::class, 'unique'])->name('item.unique');
+Route::get('/item/{item}', [ItemController::class, 'show'])->name('item.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'settings'], function () {
         Route::get('/profile', [SettingsController::class, 'profile'])->name('settings.profile');
         Route::post('/profile/photo', [SettingsController::class, 'updateProfilePhoto'])->name('settings.profile.update.photo');
+    });
+
+    Route::group(['prefix' => 'affix'], function () {
+        Route::get('/test', [AffixController::class, 'test'])->name('affix.test');
     });
 });
 

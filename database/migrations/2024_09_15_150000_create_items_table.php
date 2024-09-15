@@ -16,16 +16,13 @@ return new class extends Migration
             $table->string('name');  // Item name, e.g., "Hand Axe", "Plate Mail"
             $table->string('code')->unique();  // Item code, e.g., 'hax', 'plt'
             $table->string('type')->nullable();  // General item type, e.g., 'axe', 'armor'
-            $table->string('gfx_base')->nullable();  // Graphics file name (like 'hax')
-            $table->string('gfx_unique')->nullable();  // Graphics file name (like 'hax')
-            $table->string('gfx_set')->nullable();  // Graphics file name (like 'hax')
+            $table->string('gfx')->nullable();  // Graphics file name (like 'hax')
             $table->unsignedSmallInteger('width');
             $table->unsignedSmallInteger('height');
             $table->integer('level_requirement')->nullable();  // Required level
-            $table->integer('required_strength')->default(0);
-            $table->integer('required_dexterity')->default(0);
             $table->integer('max_sockets')->default(0);
-            $table->timestamps();
+            $table->string('itemable_type');  // This will be the type of item model (Armor, Weapon, etc.)
+            $table->unsignedBigInteger('itemable_id'); // The ID of the specific item
         });
     }
 

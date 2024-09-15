@@ -4,42 +4,17 @@ namespace Database\Seeders;
 
 use App\Models\Item;
 use App\Models\Armor;
-use Illuminate\Database\Seeder;
 
-class ArmorSeeder extends Seeder
+class ArmorSeeder extends FromFileSeeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $data = $this->getDataFromFile();
+        Armor::query()->delete();
+        $data = $this->readFile('app/Armor.txt');
         $this->create($data);
-    }
-
-    private function getDataFromFile(): array
-    {
-        // Read the file line by line
-        $properties = file(storage_path('app/Armor.txt'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-        // Get headers
-        $headers = explode("\t", $properties[0]);
-
-        // Loop through the lines
-        $data = [];
-        for ($line = 1; $line < count($properties); $line++) {
-            $split = explode("\t", $properties[$line]);
-
-            $property = [];
-            foreach ($split as $index => $value) {
-                $header = $headers[$index];
-                $property[$header] = $value;
-            }
-
-            $data[] = $property;
-        }
-
-        return $data;
     }
 
     private function create(array $data): void
@@ -49,27 +24,26 @@ class ArmorSeeder extends Seeder
                 continue;
             }
 
+            $armor = Armor::create([
+                'min_ac' => $row['minac'] === '' ? null : $row['minac'],
+                'max_ac' => $row['maxac'] === '' ? null : $row['maxac'],
+                'block' => $row['block'] === '' ? null : $row['block'],
+                'required_strength' => $row['reqstr'] === '' ? 0 : $row['reqstr'],
+            ]);
+
             // Create the base item
-            $item = Item::create([
+            $item = new Item([
                 'name' => $row['name'],
                 'code' => $row['code'],
                 'type' => $row['type'],
-                'gfx_base' => $row['invfile'],
-                'gfx_unique' => $row['uniqueinvfile'],
-                'gfx_set' => $row['setinvfile'],
+                'gfx' => $row['invfile'],
                 'level_requirement' => $row['levelreq'],
                 'width' => $row['invwidth'],
                 'height' => $row['invheight'],
                 'max_sockets' => $row['gemsockets'] === '' ? 0 : $row['gemsockets'],
-                'required_strength' => $row['reqstr'] === '' ? 0 : $row['reqstr'],
             ]);
 
-            // Create the weapon-specific entry
-            Armor::create([
-                'item_id' => $item->id,
-                'min_ac' => $row['minac'],
-                'max_ac' => $row['maxac'],
-            ]);
+            $armor->item()->save($item);
         }
     }
 }

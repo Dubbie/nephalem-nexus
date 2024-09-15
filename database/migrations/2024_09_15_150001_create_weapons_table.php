@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('weapons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained('items')->onDelete('cascade');  // Links to the base item
-            $table->integer('min_damage')->nullable();
-            $table->integer('max_damage')->nullable();
-            $table->integer('min_two_handed_damage')->nullable();  // For 2-handed weapons
-            $table->integer('max_two_handed_damage')->nullable();
-            $table->integer('min_missile_damage')->nullable(); // For ranged
-            $table->integer('max_missile_damage')->nullable();
+            $table->unsignedInteger('min_damage')->nullable();
+            $table->unsignedInteger('max_damage')->nullable();
+            $table->unsignedInteger('min_two_handed_damage')->nullable();  // For 2-handed weapons
+            $table->unsignedInteger('max_two_handed_damage')->nullable();
+            $table->unsignedInteger('min_missile_damage')->nullable(); // For ranged
+            $table->unsignedInteger('max_missile_damage')->nullable();
             $table->integer('speed')->nullable();
+            $table->unsignedInteger('required_strength')->default(0);
+            $table->unsignedInteger('required_dexterity')->default(0);
             $table->boolean('has_splash')->default(false);
-            $table->timestamps();
         });
     }
 

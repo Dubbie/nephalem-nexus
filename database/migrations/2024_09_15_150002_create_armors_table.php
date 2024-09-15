@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('armors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
-            $table->integer('min_ac')->nullable();  // Armor defense value
-            $table->integer('max_ac')->nullable();
-            $table->integer('block')->nullable();
-            $table->timestamps();
+            $table->unsignedInteger('min_ac')->nullable();  // Armor defense value
+            $table->unsignedInteger('max_ac')->nullable();
+            $table->unsignedInteger('block')->nullable();
+            $table->unsignedInteger('required_strength')->nullable();
         });
     }
 

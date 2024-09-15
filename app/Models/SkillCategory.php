@@ -18,4 +18,9 @@ class SkillCategory extends Model
     {
         return $this->hasManyThrough(Skill::class, SkillCategory::class, 'id', 'skill_category_id');
     }
+
+    public function diabloClass()
+    {
+        return $this->belongsTo(DiabloClass::class, 'class_id');
+    }
 }

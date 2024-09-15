@@ -6,10 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Armor extends Model
 {
-    protected $fillable = ['item_id', 'min_ac', 'max_ac'];
+    public $timestamps = false;
+
+    protected $fillable = [
+        'min_ac',
+        'max_ac',
+        'block',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            // Delete associated item if it exists
+            $item = $model->item;
+            if ($item) {
+                $item->delete();
+            }
+        });
+    }
 
     public function item()
     {
-        return $this->belongsTo(Item::class);
+        return $this->morphOne(Item::class, 'itemable');
     }
 }

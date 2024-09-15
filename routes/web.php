@@ -13,7 +13,6 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 
 Route::get('/guide', [BuildController::class, 'index'])->name('build.index');
 Route::get('/item', [ItemController::class, 'index'])->name('item.index');
-Route::get('/guide/{build}', [BuildController::class, 'show'])->name('build.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,5 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/profile/photo', [SettingsController::class, 'updateProfilePhoto'])->name('settings.profile.update.photo');
     });
 });
+
+Route::get('/guide/{build}', [BuildController::class, 'show'])->name('build.show');
 
 require __DIR__ . '/auth.php';
